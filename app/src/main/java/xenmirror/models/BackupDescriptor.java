@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import xenmirror.utils.Constants;
@@ -21,9 +20,8 @@ public class BackupDescriptor implements Cloneable {
     private static final String REPRESENTATION_PART_6 = ", filesCountTotal=";
     private static final String REPRESENTATION_PART_7 = ", foldersCountTotal=";
     private static final String REPRESENTATION_PART_8 = ", isSecured=";
-    private static final String REPRESENTATION_PART_9 = ", createdOn=";
-    private static final String REPRESENTATION_PART_10 = ", version=";
-    private static final String REPRESENTATION_PART_11 = "]";
+    private static final String REPRESENTATION_PART_9 = ", version=";
+    private static final String REPRESENTATION_PART_10 = "]";
 
     private List<String> filePaths;
     private List<String> foldersPaths;
@@ -33,7 +31,6 @@ public class BackupDescriptor implements Cloneable {
     private int filesCountTotal = Constants.getIntDefault();
     private int foldersCountTotal = Constants.getIntDefault();
     private boolean isSecured = Constants.getBoolDefault();
-    private Date createdOn;
     private long version = Constants.getIntDefault();
 
     private Backup backup;
@@ -47,14 +44,12 @@ public class BackupDescriptor implements Cloneable {
         this.filesCountTotal = backupDescriptorToClone.getFilesCountTotal();
         this.foldersCountTotal = backupDescriptorToClone.getFilesCountTotal();
         this.isSecured = backupDescriptorToClone.isSecured();
-        this.createdOn = Date.from(backupDescriptorToClone.getCreatedOn().toInstant());
         this.version = backupDescriptorToClone.getVersion();
     }
 
     public BackupDescriptor(
             List<File> foldersToBackup, List<File> filesToBackup, boolean isSecured, boolean checkData) {
         this.isSecured = isSecured;
-        this.createdOn = Date.from(Instant.now());
 
         init(foldersToBackup, filesToBackup, checkData);
     }
@@ -263,20 +258,12 @@ public class BackupDescriptor implements Cloneable {
         return isSecured;
     }
 
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
     public long getVersion() {
         return version;
     }
 
     public void setChangeStamp(String changeStamp) {
         this.changeStamp = changeStamp;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
     }
 
     public void setVersion(long version) {
@@ -314,7 +301,6 @@ public class BackupDescriptor implements Cloneable {
         result = prime * result
                 + Objects.hash(
                         changeStamp,
-                        createdOn,
                         filePaths,
                         filesCount,
                         filesCountTotal,
@@ -333,7 +319,6 @@ public class BackupDescriptor implements Cloneable {
         if (getClass() != obj.getClass()) return false;
         BackupDescriptor other = (BackupDescriptor) obj;
         return Objects.equals(changeStamp, other.changeStamp)
-                && Objects.equals(createdOn, other.createdOn)
                 && Objects.equals(filePaths, other.filePaths)
                 && filesCount == other.filesCount
                 && filesCountTotal == other.filesCountTotal
@@ -363,9 +348,7 @@ public class BackupDescriptor implements Cloneable {
                 + REPRESENTATION_PART_8
                 + isSecured
                 + REPRESENTATION_PART_9
-                + createdOn
-                + REPRESENTATION_PART_10
                 + version
-                + REPRESENTATION_PART_11;
+                + REPRESENTATION_PART_10;
     }
 }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -102,9 +101,9 @@ public class BackupStrategy {
         WorkspaceDescriptor workspaceDescriptor =
                 SupportFunctions.parseWorkspaceDescriptor(backupWorkspace, Config.getConfig());
 
-        Date lastBackupDate = lastBackupDescriptor.getCreatedOn();
-        Date current = Date.from(Instant.now());
-        long dateDiffSecs = current.getTime() - lastBackupDate.getTime();
+        Instant lastBackupDate = lastBackupDescriptor.getChangeStampAsInstant();
+        Instant current = Instant.now();
+        long dateDiffSecs = current.getEpochSecond() - lastBackupDate.getEpochSecond();
 
         long ddTime = SupportFunctions.dateDiffStringToMilliseconds(workspaceDescriptor.getBackupDateDiff());
 
@@ -122,11 +121,11 @@ public class BackupStrategy {
         WorkspaceDescriptor workspaceDescriptor =
                 SupportFunctions.parseWorkspaceDescriptor(backupWorkspace, Config.getConfig());
 
-        Date lastBackupDate = lastBackupDescriptor.getCreatedOn();
-        Date current = Date.from(Instant.now());
-        long dateDiffSecs = current.getTime() - lastBackupDate.getTime();
+        Instant lastBackupDate = lastBackupDescriptor.getChangeStampAsInstant();
+        Instant current = Instant.now();
+        long dateDiffSecs = current.getEpochSecond() - lastBackupDate.getEpochSecond();
 
-        long ddTime = SupportFunctions.dateDiffStringToMilliseconds(workspaceDescriptor.getBackupDateDiff());
+        long ddTime = SupportFunctions.dateDiffStringToMilliseconds(workspaceDescriptor.getBackupDateDiff()) / 1000;
 
         backupNeeded = dateDiffSecs >= ddTime;
 
@@ -358,7 +357,7 @@ public class BackupStrategy {
             backupName += preffix;
         }
 
-        String date = backupDescriptor.getCreatedOn().toString();
+        String date = Instant.now().toString();
 
         if (date != null && !date.isEmpty() && !backupName.isEmpty()) {
             backupName += Constants.getBackupNamePartsSeparator();

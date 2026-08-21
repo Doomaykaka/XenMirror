@@ -13,16 +13,12 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
@@ -368,7 +364,6 @@ public class SupportFunctions {
         String filesCountTotal = Integer.toString(descriptor.getFilesCountTotal());
         String foldersCountTotal = Integer.toString(descriptor.getFoldersCountTotal());
         boolean isSecured = descriptor.isSecured();
-        String createdOn = descriptor.getCreatedOn().toString();
         String version = Long.toString(descriptor.getVersion());
 
         try {
@@ -392,8 +387,6 @@ public class SupportFunctions {
                     properties, Constants.getBackupDescriptorPropertyNameFoldersCountTotal(), foldersCountTotal);
             SupportFunctions.setBooleanProperty(
                     properties, Constants.getBackupDescriptorPropertyNameIsSecured(), isSecured);
-            SupportFunctions.setStringProperty(
-                    properties, Constants.getBackupDescriptorPropertyNameCreatedOn(), createdOn);
             SupportFunctions.setStringProperty(properties, Constants.getBackupDescriptorPropertyNameVersion(), version);
 
             properties.store(writer, Constants.getTextDefault());
@@ -725,7 +718,6 @@ public class SupportFunctions {
         String changestamp = Constants.getTextDefault();
         String filesCount = Constants.getTextDefault();
         boolean isSecured = Constants.getBoolDefault();
-        String createdOn = Constants.getTextDefault();
         String version = Constants.getTextDefault();
 
         FileInputStream descriptorFIS;
@@ -746,8 +738,6 @@ public class SupportFunctions {
                     properties, Constants.getBackupDescriptorPropertyNameFilesCount());
             isSecured = SupportFunctions.getBooleanProperty(
                     properties, Constants.getBackupDescriptorPropertyNameIsSecured());
-            createdOn = SupportFunctions.getStringProperty(
-                    properties, Constants.getBackupDescriptorPropertyNameCreatedOn());
             version =
                     SupportFunctions.getStringProperty(properties, Constants.getBackupDescriptorPropertyNameVersion());
         } catch (FileNotFoundException e) {
@@ -767,18 +757,7 @@ public class SupportFunctions {
 
         result = new BackupDescriptor(foldersToBackup, filesToBackup, isSecured, needDataCheck);
 
-        Date createdOnDate = Date.from(Instant.now());
-        try {
-            createdOnDate =
-                    new SimpleDateFormat(Constants.getConfigDateFormatDefault(), Locale.ENGLISH).parse(createdOn);
-        } catch (ParseException e) {
-            Logger.printApplicationLog("date parse error", "SupportFunctions");
-            Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
-        }
-
         result.setVersion(Long.parseLong(version));
-        result.setCreatedOn(createdOnDate);
         result.setChangeStamp(changestamp);
         result.setFilesCount(Integer.parseInt(filesCount));
         result.setFilesCount(Integer.parseInt(filesCount));
@@ -877,10 +856,10 @@ public class SupportFunctions {
                 continue;
             }
 
-            Date lastDate = last.getDescriptor().getCreatedOn();
-            Date currentDate = workspaceBackup.getDescriptor().getCreatedOn();
+            Instant lastDate = last.getDescriptor().getChangeStampAsInstant();
+            Instant currentDate = workspaceBackup.getDescriptor().getChangeStampAsInstant();
 
-            if (currentDate.after(lastDate)) {
+            if (currentDate.isAfter(lastDate)) {
                 last = workspaceBackup;
             }
         }
@@ -936,7 +915,13 @@ public class SupportFunctions {
         String minutes = timeDef.split(Constants.getTimeSeparator())[1];
         String seconds = timeDef.split(Constants.getTimeSeparator())[2];
 
-        String millis = timePart.split(Constants.getTimeUnitsMillisSeparator())[1];
+        Logger.printApplicationLog(timePart, "DEBUG");
+
+        String millis = "0";
+
+        if (timePart.split(Constants.getTimeUnitsMillisSeparator()).length > 1) {
+            millis = timePart.split(Constants.getTimeUnitsMillisSeparator())[1];
+        }
 
         long yearsMilliseconds =
                 Long.parseLong(years) * ChronoUnit.YEARS.getDuration().toMillis();

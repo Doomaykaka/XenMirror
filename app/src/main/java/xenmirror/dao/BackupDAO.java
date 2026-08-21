@@ -2,8 +2,8 @@ package xenmirror.dao;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import xenmirror.models.Backup;
 import xenmirror.models.BackupDescriptor;
@@ -50,7 +50,7 @@ public class BackupDAO {
         return result;
     }
 
-    public Backup getBackup(Date date) {
+    public Backup getBackup(Instant date) {
         Logger.printApplicationLog("Get backup by date", "BackupDAO");
 
         Backup result = null;
@@ -70,7 +70,7 @@ public class BackupDAO {
         for (File backupFolder : workspaceFolder.listFiles()) {
             Backup parsed = SupportFunctions.parseBackupFolder(backupFolder, this.workspace);
 
-            if (parsed.getDescriptor().getCreatedOn().equals(date)) {
+            if (parsed.getDescriptor().getChangeStampAsInstant().equals(date)) {
                 result = parsed;
                 break;
             }

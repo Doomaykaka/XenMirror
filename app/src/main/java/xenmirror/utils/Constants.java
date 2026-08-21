@@ -68,7 +68,6 @@ public class Constants {
     private static final String BACKUP_DESCRIPTOR_PROPERTY_NAME_FILES_COUNT_TOTAL = "descriptor-files-count-total";
     private static final String BACKUP_DESCRIPTOR_PROPERTY_NAME_FOLDERS_COUNT_TOTAL = "descriptor-folders-count-total";
     private static final String BACKUP_DESCRIPTOR_PROPERTY_NAME_IS_SECURED = "descriptor-is-secured";
-    private static final String BACKUP_DESCRIPTOR_PROPERTY_NAME_CREATED_ON = "descriptor-created-on";
     private static final String BACKUP_DESCRIPTOR_PROPERTY_NAME_VERSION = "descriptor-version";
 
     private static final String WORKSPACE_DESCRIPTER_NOT_FOUND_MESSAGE =
@@ -251,10 +250,6 @@ public class Constants {
 
     public static String getBackupDescriptorPropertyNameIsSecured() {
         return BACKUP_DESCRIPTOR_PROPERTY_NAME_IS_SECURED;
-    }
-
-    public static String getBackupDescriptorPropertyNameCreatedOn() {
-        return BACKUP_DESCRIPTOR_PROPERTY_NAME_CREATED_ON;
     }
 
     public static String getBackupDescriptorPropertyNameVersion() {

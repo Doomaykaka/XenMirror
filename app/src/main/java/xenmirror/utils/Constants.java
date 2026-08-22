@@ -81,7 +81,7 @@ public class Constants {
     // GUI
     private static final String GUI_IMAGE_ICON_RESOURCE_PATH = "/images/app_icon.jpg";
     private static final long TRAY_HIDE_DELAY = 4000;
-    private static final String DEFAULT_DATE_VALUE = "0-0-0 00\\:00\\:00";
+    private static final String DEFAULT_DATE_VALUE = "0-0-0 00:00:00";
 
     public static String getAppName() {
         return APP_NAME;

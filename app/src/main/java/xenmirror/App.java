@@ -24,12 +24,8 @@ public class App {
 
         BackupController controller = new BackupController(workspaces);
 
-        try {
-            Tray tray = new Tray(controller);
-            tray.show();
-        } catch (NullPointerException e) {
-            ;
-        }
+        Tray tray = new Tray(controller);
+        tray.show();
     }
 
     public static boolean isClosed() {

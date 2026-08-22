@@ -67,23 +67,18 @@ public class Tray {
             }
         }
 
-        URL appIconUrl = Tray.class.getClassLoader().getResource(Constants.getGuiImageIconResourcePath());
-
-        if (appIconUrl != null) {
-            icon = Toolkit.getDefaultToolkit().getImage(appIconUrl);
-        }
+        URL appIconUrl = Tray.class.getResource(Constants.getGuiImageIconResourcePath());
+        icon = Toolkit.getDefaultToolkit().getImage(appIconUrl);
 
         JPopupMenu trayMenu = new JPopupMenu();
         addItemsToTrayMenu(trayMenu);
 
         tray = SystemTray.getSystemTray();
 
-        if (icon != null) {
-            trayIcon = new TrayIcon(icon, TRAY_ICON_TOOLTIP_NAME);
-            trayIcon.setImageAutoSize(IMAGE_IS_AUTOSIZED);
+        trayIcon = new TrayIcon(icon, TRAY_ICON_TOOLTIP_NAME);
+        trayIcon.setImageAutoSize(IMAGE_IS_AUTOSIZED);
 
-            setTrayIconListener(trayIcon, trayMenu);
-        }
+        setTrayIconListener(trayIcon, trayMenu);
     }
 
     private void addItemsToTrayMenu(JPopupMenu trayMenu) {

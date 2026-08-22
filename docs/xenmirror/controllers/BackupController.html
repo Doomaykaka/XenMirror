@@ -186,11 +186,16 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&gt;&nbsp;backupFolders)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#runBackupCheckerLoop()" class="member-name-link">runBackupCheckerLoop</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rotateBackups(xenmirror.models.Workspace,java.util.List,xenmirror.dao.BackupDAO)" class="member-name-link">rotateBackups</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToRotate,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&gt;&nbsp;workspaceBackups,
+ <a href="../dao/BackupDAO.html" title="class in xenmirror.dao">BackupDAO</a>&nbsp;dao)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateWorkspace(xenmirror.models.Workspace)" class="member-name-link">updateWorkspace</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToUpdate)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#runBackupCheckerLoop()" class="member-name-link">runBackupCheckerLoop</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateWorkspace(xenmirror.models.Workspace)" class="member-name-link">updateWorkspace</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToUpdate)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -277,6 +282,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="createLastBackupWithDescriptor(xenmirror.models.Workspace,xenmirror.dao.BackupDAO)">
 <h3>createLastBackupWithDescriptor</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">createLastBackupWithDescriptor</span><wbr><span class="parameters">(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;backupWorkspace,
+ <a href="../dao/BackupDAO.html" title="class in xenmirror.dao">BackupDAO</a>&nbsp;dao)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="rotateBackups(xenmirror.models.Workspace,java.util.List,xenmirror.dao.BackupDAO)">
+<h3>rotateBackups</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">rotateBackups</span><wbr><span class="parameters">(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToRotate,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&gt;&nbsp;workspaceBackups,
  <a href="../dao/BackupDAO.html" title="class in xenmirror.dao">BackupDAO</a>&nbsp;dao)</span></div>
 </section>
 </li>

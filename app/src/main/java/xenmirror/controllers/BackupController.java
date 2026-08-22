@@ -3,6 +3,7 @@ package xenmirror.controllers;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,6 +84,8 @@ public class BackupController {
         } else {
             createLastBackupWithDescriptor(backupWorkspace, dao);
         }
+
+        rotateBackups(backupWorkspace, allBackups, dao);
     }
 
     private void createFirstBackupWithDescriptor(Workspace backupWorkspace, BackupDAO dao) {
@@ -124,6 +127,24 @@ public class BackupController {
         descriptor.setBackup(backupToSave);
 
         dao.saveBackup(lastBackup);
+    }
+
+    private void rotateBackups(Workspace workspaceToRotate, List<Backup> workspaceBackups, BackupDAO dao) {
+        WorkspaceDescriptor descriptor = workspaceToRotate.getDescriptor();
+
+        int maxBackups = descriptor.getRotateAfter();
+
+        if (maxBackups == 0) {
+            return;
+        }
+
+        if (workspaceBackups.size() > maxBackups) {
+            workspaceBackups.sort(Comparator.comparing(bd -> bd.getDescriptor().getChangeStampAsInstant()));
+
+            for (int i = 0; i < workspaceBackups.size() - maxBackups; i++) {
+                dao.removeBackup(workspaceBackups.get(i));
+            }
+        }
     }
 
     public void restore(Workspace backupWorkspace) {

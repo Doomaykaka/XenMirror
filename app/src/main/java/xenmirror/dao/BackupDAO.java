@@ -43,6 +43,13 @@ public class BackupDAO {
         for (File backupFolder : workspaceFolder.listFiles()) {
             if (backupFolder.getName().equals(name)) {
                 result = SupportFunctions.parseBackupFolder(backupFolder, this.workspace);
+
+                if (result == null) {
+                    continue;
+                }
+
+                readAndConnectBackupDescriptor(backupFolder, result);
+
                 break;
             }
         }
@@ -69,6 +76,12 @@ public class BackupDAO {
 
         for (File backupFolder : workspaceFolder.listFiles()) {
             Backup parsed = SupportFunctions.parseBackupFolder(backupFolder, this.workspace);
+
+            if (parsed == null) {
+                continue;
+            }
+
+            readAndConnectBackupDescriptor(backupFolder, parsed);
 
             if (parsed.getDescriptor().getChangeStampAsInstant().equals(date)) {
                 result = parsed;
@@ -98,6 +111,12 @@ public class BackupDAO {
 
         for (File backupFolder : workspaceFolder.listFiles()) {
             Backup parsed = SupportFunctions.parseBackupFolder(backupFolder, this.workspace);
+
+            if (parsed == null) {
+                continue;
+            }
+
+            readAndConnectBackupDescriptor(backupFolder, parsed);
 
             if (parsed.getDescriptor().getVersion() == version) {
                 result = parsed;
@@ -130,8 +149,19 @@ public class BackupDAO {
                 continue;
             }
 
-            Backup parsed = SupportFunctions.parseBackupFolder(backupFolder, this.workspace);
-            result.add(parsed);
+            try {
+                Backup parsed = SupportFunctions.parseBackupFolder(backupFolder, this.workspace);
+
+                if (parsed == null) {
+                    continue;
+                }
+
+                readAndConnectBackupDescriptor(backupFolder, parsed);
+
+                result.add(parsed);
+            } catch (NullPointerException e) {
+                ;
+            }
         }
 
         return result;
@@ -161,7 +191,7 @@ public class BackupDAO {
         return saveIsCorrect;
     }
 
-    public boolean removeBackup(Backup backupToRemove) {
+    public synchronized boolean removeBackup(Backup backupToRemove) {
         Logger.printApplicationLog("Remove backup", "BackupDAO");
 
         boolean backupIsRemoved = Constants.getBoolDefault();
@@ -180,22 +210,53 @@ public class BackupDAO {
             workspaceFolder.mkdir();
         }
 
-        String backupName = null;
-        try {
-            backupName = strategy.getBackupName(backupToRemove.getDescriptor(), workspace);
-        } catch (IOException e) {
-            Logger.printApplicationLog("cant get backup name", "SupportFunctions");
-            Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
+        File currentBackupFolder = null;
+
+        for (File backupFolder : workspaceFolder.listFiles()) {
+            if (!backupFolder.isDirectory()) {
+                continue;
+            }
+
+            Backup parsed = SupportFunctions.parseBackupFolder(backupFolder, this.workspace);
+
+            if (parsed == null) {
+                continue;
+            }
+
+            readAndConnectBackupDescriptor(backupFolder, parsed);
+
+            if (parsed.getDescriptor().getVersion()
+                    == backupToRemove.getDescriptor().getVersion()) {
+                currentBackupFolder = backupFolder;
+                break;
+            }
         }
 
-        File currentBackupFolder = new File(workspaceFolder, backupName);
+        if (currentBackupFolder == null) {
+            return backupIsRemoved;
+        }
 
         SupportFunctions.clearFolder(currentBackupFolder);
 
         backupIsRemoved = currentBackupFolder.delete();
 
         return backupIsRemoved;
+    }
+
+    private void readAndConnectBackupDescriptor(File backupFolder, Backup backup) {
+        File backupDescriptor =
+                new File(backupFolder, backupFolder.getName() + Constants.getBackupDescriptionFileExt());
+
+        boolean backupIsCorrupted = backupDescriptor.getParentFile().listFiles().length == 1;
+
+        if (backupDescriptor == null || !backupDescriptor.exists() || backupIsCorrupted) {
+            return;
+        }
+
+        BackupDescriptor descriptor = SupportFunctions.readBackupDescriptor(backupDescriptor);
+
+        backup.setDescriptor(descriptor);
+        descriptor.setBackup(backup);
     }
 
     private void updateWorkspace() {

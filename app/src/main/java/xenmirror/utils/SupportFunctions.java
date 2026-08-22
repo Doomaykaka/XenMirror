@@ -366,8 +366,7 @@ public class SupportFunctions {
         boolean isSecured = descriptor.isSecured();
         String version = Long.toString(descriptor.getVersion());
 
-        try {
-            FileOutputStream configFOS = new FileOutputStream(backupDescriptorFile);
+        try (FileOutputStream configFOS = new FileOutputStream(backupDescriptorFile)) {
             OutputStreamWriter writer =
                     new OutputStreamWriter(configFOS, Config.getConfig().getSystemEncoding());
 
@@ -391,7 +390,6 @@ public class SupportFunctions {
 
             properties.store(writer, Constants.getTextDefault());
             configFOS.flush();
-            configFOS.close();
         } catch (FileNotFoundException e) {
             Logger.printApplicationLog("descriptor file search error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
@@ -549,10 +547,9 @@ public class SupportFunctions {
         for (File entry : folder.listFiles()) {
             if (entry.isDirectory()) {
                 clearFolder(entry);
-                entry.delete();
-            } else {
-                entry.delete();
             }
+
+            entry.delete();
         }
     }
 
@@ -580,6 +577,12 @@ public class SupportFunctions {
         File descriptorFile = null;
         File archiveFile = null;
 
+        final int NORMAL_FOLDER_SIZE = 2;
+
+        if (folderElements.length < NORMAL_FOLDER_SIZE) {
+            return result;
+        }
+
         for (File element : folderElements) {
             if (descriptorFile == null) {
                 descriptorFile = checkThatFileIsDescriptorAndReturn(element);
@@ -595,13 +598,8 @@ public class SupportFunctions {
         }
 
         if (descriptorFile == null || archiveFile == null) {
-            try {
-                throw new NullPointerException("backup files is currupted");
-            } catch (NullPointerException e) {
-                Logger.printApplicationLog("structure check error", "SupportFunctions");
-                Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-                e.printStackTrace();
-            }
+            Logger.printApplicationLog("backup is corrupted", "SupportFunctions");
+
             return result;
         }
 
@@ -709,7 +707,9 @@ public class SupportFunctions {
 
         BackupDescriptor result = null;
 
-        if (descriptorFile == null || !descriptorFile.exists()) {
+        boolean backupIsCorrupted = descriptorFile.getParentFile().listFiles().length == 1;
+
+        if (descriptorFile == null || !descriptorFile.exists() || backupIsCorrupted) {
             return result;
         }
 
@@ -720,9 +720,7 @@ public class SupportFunctions {
         boolean isSecured = Constants.getBoolDefault();
         String version = Constants.getTextDefault();
 
-        FileInputStream descriptorFIS;
-        try {
-            descriptorFIS = new FileInputStream(descriptorFile);
+        try (FileInputStream descriptorFIS = new FileInputStream(descriptorFile)) {
             InputStreamReader reader =
                     new InputStreamReader(descriptorFIS, Config.getConfig().getSystemEncoding());
             Properties properties = new Properties();
@@ -1070,6 +1068,16 @@ public class SupportFunctions {
         String foldersToBackup =
                 SupportFunctions.getStringProperty(properties, Constants.getPropertyNameFoldersToBackup());
         String filesToBackup = SupportFunctions.getStringProperty(properties, Constants.getPropertyNameFilesToBackup());
+        String rotateAfterValue =
+                SupportFunctions.getStringProperty(properties, Constants.getPropertyNameRotateAfterCount());
+
+        int rotateAfter = 0;
+
+        try {
+            rotateAfter = Integer.parseInt(rotateAfterValue);
+        } catch (NumberFormatException e) {
+            ;
+        }
 
         List<File> folders = listOfPathsToListOfFiles(listRepresentationToList(foldersToBackup));
         List<File> files = listOfPathsToListOfFiles(listRepresentationToList(filesToBackup));
@@ -1088,7 +1096,8 @@ public class SupportFunctions {
                 folders,
                 files,
                 backupsStrategyTypes,
-                workspace);
+                workspace,
+                rotateAfter);
 
         return parsedDescriptor;
     }

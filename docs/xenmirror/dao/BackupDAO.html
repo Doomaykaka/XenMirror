@@ -149,15 +149,19 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../models/Backup.html" title="class in xenmirror.models">Backup</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBackup(java.time.Instant)" class="member-name-link">getBackup</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;date)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeBackup(xenmirror.models.Backup)" class="member-name-link">removeBackup</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backupToRemove)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readAndConnectBackupDescriptor(java.io.File,xenmirror.models.Backup)" class="member-name-link">readAndConnectBackupDescriptor</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;backupFolder,
+ <a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backup)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#saveBackup(xenmirror.models.Backup)" class="member-name-link">saveBackup</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;lastBackup)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeBackup(xenmirror.models.Backup)" class="member-name-link">removeBackup</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backupToRemove)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateWorkspace()" class="member-name-link">updateWorkspace</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#saveBackup(xenmirror.models.Backup)" class="member-name-link">saveBackup</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;lastBackup)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateWorkspace()" class="member-name-link">updateWorkspace</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -244,6 +248,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="removeBackup(xenmirror.models.Backup)">
 <h3>removeBackup</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">removeBackup</span><wbr><span class="parameters">(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backupToRemove)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="readAndConnectBackupDescriptor(java.io.File,xenmirror.models.Backup)">
+<h3>readAndConnectBackupDescriptor</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">readAndConnectBackupDescriptor</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;backupFolder,
+ <a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backup)</span></div>
 </section>
 </li>
 <li>

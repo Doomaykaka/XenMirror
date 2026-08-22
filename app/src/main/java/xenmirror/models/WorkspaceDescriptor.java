@@ -14,7 +14,8 @@ public class WorkspaceDescriptor {
     private static final String REPRESENTATION_PART_7 = ", backupInArchive=";
     private static final String REPRESENTATION_PART_8 = ", filesToBackup=";
     private static final String REPRESENTATION_PART_9 = ", foldersToBackup=";
-    private static final String REPRESENTATION_PART_10 = "]";
+    private static final String REPRESENTATION_PART_10 = ", rotateAfter=";
+    private static final String REPRESENTATION_PART_11 = "]";
 
     private String backupPassword;
     private String backupDateDiff;
@@ -25,6 +26,7 @@ public class WorkspaceDescriptor {
     private boolean backupInArchive;
     private List<File> foldersToBackup;
     private List<File> filesToBackup;
+    private int rotateAfter;
 
     private String backupsStrategyTypes;
 
@@ -41,7 +43,8 @@ public class WorkspaceDescriptor {
             List<File> foldersToBackup,
             List<File> filesToBackup,
             String backupsStrategyTypes,
-            Workspace workspace) {
+            Workspace workspace,
+            int rotateAfter) {
         this.backupPassword = backupPassword;
         this.backupDateDiff = backupDateDiff;
         this.backupUseTimestamps = backupUseTimestamps;
@@ -53,6 +56,7 @@ public class WorkspaceDescriptor {
         this.filesToBackup = filesToBackup;
         this.backupsStrategyTypes = backupsStrategyTypes;
         this.workspace = workspace;
+        this.rotateAfter = rotateAfter;
     }
 
     public String getBackupPassword() {
@@ -127,6 +131,14 @@ public class WorkspaceDescriptor {
         this.filesToBackup = filesToBackup;
     }
 
+    public int getRotateAfter() {
+        return rotateAfter;
+    }
+
+    public void setRotateAfter(int rotateAfter) {
+        this.rotateAfter = rotateAfter;
+    }
+
     public String getBackupsStrategyTypes() {
         return backupsStrategyTypes;
     }
@@ -156,7 +168,8 @@ public class WorkspaceDescriptor {
                 backupsStrategyTypes,
                 filesToBackup,
                 foldersToBackup,
-                workspace);
+                workspace,
+                rotateAfter);
     }
 
     @Override
@@ -175,7 +188,8 @@ public class WorkspaceDescriptor {
                 && Objects.equals(backupsStrategyTypes, other.backupsStrategyTypes)
                 && Objects.equals(filesToBackup, other.filesToBackup)
                 && Objects.equals(foldersToBackup, other.foldersToBackup)
-                && Objects.equals(workspace, other.workspace);
+                && Objects.equals(workspace, other.workspace)
+                && Objects.equals(rotateAfter, other.rotateAfter);
     }
 
     @Override
@@ -198,6 +212,8 @@ public class WorkspaceDescriptor {
                 + filesToBackup.size()
                 + REPRESENTATION_PART_9
                 + foldersToBackup.size()
-                + REPRESENTATION_PART_10;
+                + REPRESENTATION_PART_10
+                + rotateAfter
+                + REPRESENTATION_PART_11;
     }
 }

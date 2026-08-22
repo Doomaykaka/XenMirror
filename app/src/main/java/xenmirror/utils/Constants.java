@@ -2,7 +2,7 @@ package xenmirror.utils;
 
 public class Constants {
     // App
-    private static final String APP_NAME = "SmallBackupV2";
+    private static final String APP_NAME = "XenMirror";
     private static final String TEXT_DEFAULT = "";
     private static final String SPACE = " ";
     private static final String SPACE_REGEXP = "\s";
@@ -52,8 +52,10 @@ public class Constants {
     private static final String PROPERTY_NAME_BACKUPS_STRATEGY_TYPES = "backups-strategy-types";
     private static final String PROPERTY_NAME_FILES_TO_BACKUP = "files-to-backup";
     private static final String PROPERTY_NAME_FOLDERS_TO_BACKUP = "folders-to-backup";
+    private static final String PROPERTY_NAME_ROTATE_AFTER_COUNT = "rotate-after";
     private static final String CONFIG_DEFAULT_STRING_PROPERTIES_VALUES = "";
     private static final Boolean CONFIG_DEFAULT_BOOLEAN_PROPERTIES_VALUES = false;
+    private static final int CONFIG_DEFAULT_ROTATE_AFTER_VALUE = 100;
     private static final String CONFIG_FOLDER_NOT_FOUND_MESSAGE =
             "Config folder not found. Please create config folder with path:";
     private static final String CONFIG_DATE_FORMAT_DEFAULT = "EEE MMM dd HH:mm:ss zzz yyyy";
@@ -342,5 +344,13 @@ public class Constants {
 
     public static String getWorkspaceDescripterNotFoundMessage() {
         return WORKSPACE_DESCRIPTER_NOT_FOUND_MESSAGE;
+    }
+
+    public static String getPropertyNameRotateAfterCount() {
+        return PROPERTY_NAME_ROTATE_AFTER_COUNT;
+    }
+
+    public static int getConfigDefaultRotateAfterValue() {
+        return CONFIG_DEFAULT_ROTATE_AFTER_VALUE;
     }
 }

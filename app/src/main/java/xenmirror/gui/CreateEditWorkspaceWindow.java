@@ -14,7 +14,6 @@ import xenmirror.controllers.BackupController;
 import xenmirror.models.BackupStrategyType;
 import xenmirror.models.Workspace;
 import xenmirror.models.WorkspaceDescriptor;
-import xenmirror.utils.Config;
 import xenmirror.utils.Constants;
 import xenmirror.utils.SupportFunctions;
 
@@ -31,7 +30,7 @@ public class CreateEditWorkspaceWindow extends JFrame {
 
     private Runnable onClose;
 
-    public CreateEditWorkspaceWindow(Workspace workspaceToEdit) {
+    public CreateEditWorkspaceWindow(Workspace workspaceToEdit, BackupController backupController) {
         boolean isResizable = false;
 
         setTitle(WINDOW_TITLE_EDIT);
@@ -44,6 +43,7 @@ public class CreateEditWorkspaceWindow extends JFrame {
         setIconImage(SupportFunctions.getAppIcon());
 
         this.workspaceToEdit = workspaceToEdit;
+        this.backupController = backupController;
 
         JPanel windowLayer = new JPanel();
         windowLayer.setLayout(new BoxLayout(windowLayer, BoxLayout.Y_AXIS));
@@ -56,11 +56,9 @@ public class CreateEditWorkspaceWindow extends JFrame {
         readFieldsStateAndSetInGUI(fields);
 
         addButtonsActionListeners(controls, fields);
-
-        initController();
     }
 
-    public CreateEditWorkspaceWindow() {
+    public CreateEditWorkspaceWindow(BackupController backupController) {
         boolean isResizable = false;
 
         setTitle(WINDOW_TITLE_CREATE);
@@ -71,6 +69,8 @@ public class CreateEditWorkspaceWindow extends JFrame {
         setResizable(isResizable);
 
         setIconImage(SupportFunctions.getAppIcon());
+
+        this.backupController = backupController;
 
         JPanel windowLayer = new JPanel();
         windowLayer.setLayout(new BoxLayout(windowLayer, BoxLayout.Y_AXIS));
@@ -84,8 +84,6 @@ public class CreateEditWorkspaceWindow extends JFrame {
         add(windowLayer);
 
         addButtonsActionListeners(controls, fields);
-
-        initController();
     }
 
     public void showWindow(Runnable onClose) {
@@ -491,11 +489,5 @@ public class CreateEditWorkspaceWindow extends JFrame {
         if (this.onClose != null) {
             this.onClose.run();
         }
-    }
-
-    private void initController() {
-        List<Workspace> workspaces = SupportFunctions.findWorkspaces(Config.getConfig());
-
-        backupController = new BackupController(workspaces);
     }
 }

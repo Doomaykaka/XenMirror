@@ -35,7 +35,6 @@ public class BackupController {
         this.workspaces = managedWorkspaces;
 
         init();
-        runBackupCheckerLoop();
     }
 
     public void init() {
@@ -67,7 +66,7 @@ public class BackupController {
         updateWorkspace(workspace);
     }
 
-    private void runBackupCheckerLoop() {
+    public void runBackupCheckerLoop() {
         Logger.printApplicationLog("Run backup checker loop", "BackupController");
 
         BackupCheckerTask checkerTask = new BackupCheckerTask();
@@ -320,6 +319,8 @@ public class BackupController {
         try {
             if (descriptorFile.createNewFile()) {
                 writeWorkspaceDescriptor(descriptorFile, workspaceToCreate);
+
+                workspaces.add(workspaceToCreate);
             }
         } catch (IOException e) {
             Logger.printApplicationLog("cant create workspace folder", "BackupController");

@@ -30,6 +30,7 @@ public class App {
         List<Workspace> workspaces = SupportFunctions.findWorkspaces(appConfig);
 
         BackupController controller = new BackupController(workspaces);
+        controller.runBackupCheckerLoop();
 
         Tray tray = new Tray(controller);
         tray.show();

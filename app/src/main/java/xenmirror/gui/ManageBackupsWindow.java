@@ -1,14 +1,12 @@
 package xenmirror.gui;
 
 import java.awt.*;
-import java.util.List;
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import xenmirror.controllers.BackupController;
 import xenmirror.models.Workspace;
-import xenmirror.utils.Config;
 import xenmirror.utils.SupportFunctions;
 
 public class ManageBackupsWindow extends JFrame {
@@ -20,7 +18,7 @@ public class ManageBackupsWindow extends JFrame {
     private static final int HEIGHT = 450;
     private static final String WINDOW_TITLE = "Manage backups";
 
-    public ManageBackupsWindow() {
+    public ManageBackupsWindow(BackupController backupController) {
         boolean isResizable = false;
 
         setTitle(WINDOW_TITLE);
@@ -30,6 +28,8 @@ public class ManageBackupsWindow extends JFrame {
         setResizable(isResizable);
 
         setLayout(new BorderLayout());
+
+        this.backupController = backupController;
 
         String[] columnNames = {"Workspace name", "View backups", "Backup", "Edit", "Delete"};
 
@@ -65,7 +65,6 @@ public class ManageBackupsWindow extends JFrame {
 
         add(bottomRightPanel, BorderLayout.SOUTH);
 
-        initController();
         loadWorkspaces();
     }
 
@@ -139,7 +138,8 @@ public class ManageBackupsWindow extends JFrame {
     }
 
     private void editWorkspace(Workspace workspace) {
-        CreateEditWorkspaceWindow createEditWorkspaceWindow = new CreateEditWorkspaceWindow(workspace);
+        CreateEditWorkspaceWindow createEditWorkspaceWindow =
+                new CreateEditWorkspaceWindow(workspace, backupController);
         createEditWorkspaceWindow.showWindow(() -> {
             SwingUtilities.invokeLater(() -> {
                 refreshTable();
@@ -176,12 +176,6 @@ public class ManageBackupsWindow extends JFrame {
         loadWorkspaces();
     }
 
-    private void initController() {
-        List<Workspace> workspaces = SupportFunctions.findWorkspaces(Config.getConfig());
-
-        backupController = new BackupController(workspaces);
-    }
-
     private void loadWorkspaces() {
         for (Workspace slot : backupController.getWorkspaces()) {
             addWorkspaceSlot(slot);
@@ -197,7 +191,7 @@ public class ManageBackupsWindow extends JFrame {
     }
 
     private void createNewWorkspace() {
-        CreateEditWorkspaceWindow createEditWorkspaceWindow = new CreateEditWorkspaceWindow();
+        CreateEditWorkspaceWindow createEditWorkspaceWindow = new CreateEditWorkspaceWindow(backupController);
         createEditWorkspaceWindow.showWindow(() -> {
             SwingUtilities.invokeLater(() -> {
                 refreshTable();

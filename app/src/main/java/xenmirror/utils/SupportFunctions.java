@@ -124,6 +124,10 @@ public class SupportFunctions {
 
         if (state == JFileChooser.APPROVE_OPTION) {
             selectedFolders = fileChooser.getSelectedFiles();
+
+            if (selectedFolders.length == 0) {
+                selectedFolders = new File[] {fileChooser.getSelectedFile()};
+            }
         }
 
         return selectedFolders;
@@ -138,6 +142,10 @@ public class SupportFunctions {
 
         if (state == JFileChooser.APPROVE_OPTION) {
             selectedFiles = fileChooser.getSelectedFiles();
+
+            if (selectedFiles.length == 0) {
+                selectedFiles = new File[] {fileChooser.getSelectedFile()};
+            }
         }
 
         return selectedFiles;

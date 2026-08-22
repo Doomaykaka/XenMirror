@@ -1,13 +1,17 @@
 package xenmirror.controllers;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 import xenmirror.App;
 import xenmirror.dao.BackupDAO;
@@ -292,5 +296,98 @@ public class BackupController {
 
             SupportFunctions.clearFolder(workspaceFolder);
         }
+    }
+
+    public void createNewWorkspace(Workspace workspaceToCreate) {
+        File backupsFolder = new File(Config.getConfig().getBackupsFolderPath());
+        File workspaceFolder = new File(backupsFolder, workspaceToCreate.getName());
+
+        if (!workspaceFolder.exists()) {
+            workspaceFolder.mkdir();
+        }
+
+        Path pathToDescriptor = Path.of(workspaceFolder
+                .toPath()
+                .resolve(Constants.getConfigFilename())
+                .toFile()
+                .getAbsolutePath());
+
+        File descriptorFile = pathToDescriptor.toFile();
+
+        try {
+            if (descriptorFile.createNewFile()) {
+                writeWorkspaceDescriptor(descriptorFile, workspaceToCreate);
+            }
+        } catch (IOException e) {
+            Logger.printApplicationLog("cant create workspace folder", "BackupController");
+            e.printStackTrace();
+        }
+    }
+
+    private void writeWorkspaceDescriptor(File descriptorFile, Workspace workspaceToCreate) {
+        try (FileOutputStream descriptorFOS = new FileOutputStream(descriptorFile.getAbsolutePath())) {
+            OutputStreamWriter writer =
+                    new OutputStreamWriter(descriptorFOS, Config.getConfig().getSystemEncoding());
+            Properties properties = new Properties();
+
+            List<File> files = workspaceToCreate.getDescriptor().getFilesToBackup();
+            List<File> folders = workspaceToCreate.getDescriptor().getFoldersToBackup();
+            List<String> filesPaths =
+                    files.stream().map(file -> file.getAbsolutePath()).toList();
+            List<String> foldersPaths =
+                    folders.stream().map(folder -> folder.getAbsolutePath()).toList();
+            String filesPathsValue = String.join(Constants.getListSeparator(), filesPaths);
+            String foldersPathsValue = String.join(Constants.getListSeparator(), foldersPaths);
+
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupDateDiff(),
+                    workspaceToCreate.getDescriptor().getBackupDateDiff());
+            SupportFunctions.setBooleanProperty(
+                    properties,
+                    Constants.getPropertyNameBackupInArchive(),
+                    workspaceToCreate.getDescriptor().isBackupInArchive());
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupPassword(),
+                    workspaceToCreate.getDescriptor().getBackupPassword());
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupPostfix(),
+                    workspaceToCreate.getDescriptor().getBackupPostfix());
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupPreffix(),
+                    workspaceToCreate.getDescriptor().getBackupPreffix());
+            SupportFunctions.setBooleanProperty(
+                    properties,
+                    Constants.getPropertyNameBackupUseTimestamp(),
+                    workspaceToCreate.getDescriptor().isBackupUseTimestamps());
+            SupportFunctions.setBooleanProperty(
+                    properties,
+                    Constants.getPropertyNameBackupUseVersion(),
+                    workspaceToCreate.getDescriptor().isBackupUseVersion());
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupsStrategyTypes(),
+                    workspaceToCreate.getDescriptor().getBackupsStrategyTypes());
+            SupportFunctions.setStringProperty(properties, Constants.getPropertyNameFilesToBackup(), filesPathsValue);
+            SupportFunctions.setStringProperty(
+                    properties, Constants.getPropertyNameFoldersToBackup(), foldersPathsValue);
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameRotateAfterCount(),
+                    Integer.toString(workspaceToCreate.getDescriptor().getRotateAfter()));
+
+            properties.store(writer, Constants.getTextDefault());
+            descriptorFOS.flush();
+        } catch (SecurityException | IOException e) {
+            Logger.printApplicationLog("Failed to save workspace descriptor file", "BackupController");
+            e.printStackTrace();
+        }
+    }
+
+    public void editWorkspace(Workspace workspaceToEdit) {
+        // TODO
     }
 }

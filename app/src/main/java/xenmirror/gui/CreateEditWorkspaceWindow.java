@@ -2,7 +2,6 @@ package xenmirror.gui;
 
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -11,18 +10,24 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import xenmirror.controllers.BackupController;
+import xenmirror.models.BackupStrategyType;
 import xenmirror.models.Workspace;
+import xenmirror.models.WorkspaceDescriptor;
 import xenmirror.utils.Config;
 import xenmirror.utils.Constants;
 import xenmirror.utils.SupportFunctions;
 
 public class CreateEditWorkspaceWindow extends JFrame {
+    private static BackupController backupController;
     private static final int WIDTH = 300;
-    private static final int HEIGHT = 675;
+    private static final int HEIGHT = 875;
     private static final String WINDOW_TITLE_CREATE = "Create workspace";
     private static final String WINDOW_TITLE_EDIT = "Edit workspace";
 
     private Workspace workspaceToEdit;
+    private File[] files;
+    private File[] folders;
 
     public CreateEditWorkspaceWindow(Workspace workspaceToEdit) {
         boolean isResizable = false;
@@ -49,6 +54,8 @@ public class CreateEditWorkspaceWindow extends JFrame {
         readFieldsStateAndSetInGUI(fields);
 
         addButtonsActionListeners(controls, fields);
+
+        initController();
     }
 
     public CreateEditWorkspaceWindow() {
@@ -67,11 +74,16 @@ public class CreateEditWorkspaceWindow extends JFrame {
         windowLayer.setLayout(new BoxLayout(windowLayer, BoxLayout.Y_AXIS));
 
         List<JComponent> fields = fillWindowFields(windowLayer);
+
+        SupportFunctions.setEntityWindowJTextfieldValue((JPanel) fields.get(1), Constants.getDefaultDateValue());
+
         List<JButton> controls = fillWindowControls(windowLayer);
 
         add(windowLayer);
 
         addButtonsActionListeners(controls, fields);
+
+        initController();
     }
 
     public void showWindow() {
@@ -85,26 +97,28 @@ public class CreateEditWorkspaceWindow extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(40, 20, 40, 20));
 
+        JPanel backupNameInput = SupportFunctions.getEntityWindowJTextfield("Backup name");
         JPanel backupDateDiffInput = SupportFunctions.getEntityWindowJTextfield("Backup date diff");
         JPanel backupInArchiveInput = SupportFunctions.getEntityWindowCheckbox("Backup in archive");
         JPanel backupPasswordInput = SupportFunctions.getEntityWindowJTextfield("Backup password");
         JPanel backupPostfixInput = SupportFunctions.getEntityWindowJTextfield("Backup name postfix");
         JPanel backupPrefixInput = SupportFunctions.getEntityWindowJTextfield("Backup name prefix");
-        JPanel backupUseTimestampInput = SupportFunctions.getEntityWindowJTextfield("Backup use timestamp");
-        JPanel backupUseVersionInput = SupportFunctions.getEntityWindowJTextfield("Backup use version");
+        JPanel backupUseTimestampInput = SupportFunctions.getEntityWindowCheckbox("Backup use timestamp");
+        JPanel backupUseVersionInput = SupportFunctions.getEntityWindowCheckbox("Backup use version");
         JPanel backupUseManualStrategyInput = SupportFunctions.getEntityWindowCheckbox("Backup use manual strategy");
         JPanel backupUseTimeStrategyInput = SupportFunctions.getEntityWindowCheckbox("Backup use time strategy");
         JPanel backupUseChangeStrategyInput = SupportFunctions.getEntityWindowCheckbox("Backup use change strategy");
         JPanel backupFoldersInput = SupportFunctions.getEntityWindowJTextfield("Backup folders paths");
         JButton backupFoldersChooserInput = new JButton("Backup folders paths");
-        JPanel backupFilesInput = SupportFunctions.getEntityWindowJTextfield("Backup folders paths");
+        JPanel backupFilesInput = SupportFunctions.getEntityWindowJTextfield("Backup files paths");
         JButton backupFilesChooserInput = new JButton("Backup files paths");
         JPanel backupRotateAfterInput = SupportFunctions.getEntityWindowJTextfield("Backup rotate after N times");
 
         addChooseFoldersActionListener(backupFoldersInput, backupFoldersChooserInput);
-        addChooseFilesActionListener(backupRotateAfterInput, backupFilesChooserInput);
+        addChooseFilesActionListener(backupFilesInput, backupFilesChooserInput);
 
         int gap = 15;
+        SupportFunctions.addChildPanelWithGap(panel, backupNameInput, gap);
         SupportFunctions.addChildPanelWithGap(panel, backupDateDiffInput, gap);
         SupportFunctions.addChildPanelWithGap(panel, backupInArchiveInput, gap);
         SupportFunctions.addChildPanelWithGap(panel, backupPasswordInput, gap);
@@ -121,6 +135,7 @@ public class CreateEditWorkspaceWindow extends JFrame {
         SupportFunctions.addChildWithGap(panel, backupFilesChooserInput, gap);
         SupportFunctions.addChildPanelWithGap(panel, backupRotateAfterInput, gap);
 
+        fields.add(backupNameInput);
         fields.add(backupDateDiffInput);
         fields.add(backupInArchiveInput);
         fields.add(backupPasswordInput);
@@ -147,7 +162,7 @@ public class CreateEditWorkspaceWindow extends JFrame {
             String command = e.getActionCommand();
             switch (command) {
                 case "Backup folders paths":
-                    File[] folders = SupportFunctions.chooseFolders();
+                    folders = SupportFunctions.chooseFolders();
 
                     String[] paths = new String[folders.length];
 
@@ -171,7 +186,7 @@ public class CreateEditWorkspaceWindow extends JFrame {
             String command = e.getActionCommand();
             switch (command) {
                 case "Backup files paths":
-                    File[] files = SupportFunctions.chooseFiles();
+                    files = SupportFunctions.chooseFiles();
 
                     String[] paths = new String[files.length];
 
@@ -197,50 +212,105 @@ public class CreateEditWorkspaceWindow extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(40, 20, 40, 20));
 
-        JButton btnSaveOptions = new JButton("Save");
-        JButton btnCancelOptions = new JButton("Cancel");
+        JButton btnCreateWorkspace = new JButton("Create");
+        JButton btnEditWorkspace = new JButton("Edit");
+        JButton btnCancelWorkspace = new JButton("Cancel");
 
         int gap = 15;
-        SupportFunctions.addButtonWithGap(panel, btnSaveOptions, gap);
-        SupportFunctions.addButtonWithGap(panel, btnCancelOptions, gap);
 
-        controls.add(btnSaveOptions);
-        controls.add(btnCancelOptions);
+        if (workspaceToEdit == null) {
+            SupportFunctions.addButtonWithGap(panel, btnCreateWorkspace, gap);
+
+            controls.add(btnCreateWorkspace);
+        } else {
+            SupportFunctions.addButtonWithGap(panel, btnEditWorkspace, gap);
+
+            controls.add(btnEditWorkspace);
+        }
+
+        SupportFunctions.addButtonWithGap(panel, btnCancelWorkspace, gap);
+
+        controls.add(btnCancelWorkspace);
 
         windowLayer.add(panel);
 
         return controls;
     }
 
-    private void readFieldsStateAndSetInGUI(List<JComponent> options) {
-        JPanel logAppPanel = (JPanel) options.get(0);
-        JPanel useLafPanel = (JPanel) options.get(1);
-        JPanel useDarkPanel = (JPanel) options.get(2);
-        JPanel backupFolderPath = (JPanel) options.get(3);
-        JPanel filesCheckDelayMs = (JPanel) options.get(4);
-        JPanel trayShowTimeMs = (JPanel) options.get(5);
-        JPanel useRussian = (JPanel) options.get(6);
+    private void readFieldsStateAndSetInGUI(List<JComponent> fields) {
+        JPanel backupNameInput = (JPanel) fields.get(0);
+        JPanel backupDateDiffInput = (JPanel) fields.get(1);
+        JPanel backupInArchiveInput = (JPanel) fields.get(2);
+        JPanel backupPasswordInput = (JPanel) fields.get(3);
+        JPanel backupPostfixInput = (JPanel) fields.get(4);
+        JPanel backupPrefixInput = (JPanel) fields.get(5);
+        JPanel backupUseTimestampInput = (JPanel) fields.get(6);
+        JPanel backupUseVersionInput = (JPanel) fields.get(7);
+        JPanel backupUseManualStrategyInput = (JPanel) fields.get(8);
+        JPanel backupUseTimeStrategyInput = (JPanel) fields.get(9);
+        JPanel backupUseChangeStrategyInput = (JPanel) fields.get(10);
+        JPanel backupFoldersInput = (JPanel) fields.get(11);
+        JPanel backupFilesInput = (JPanel) fields.get(13);
+        JPanel backupRotateAfterInput = (JPanel) fields.get(15);
 
-        //        SupportFunctions.setEntityWindowCheckboxValue(logAppPanel, appConfig.isLogApp());
-        //        SupportFunctions.setEntityWindowCheckboxValue(useLafPanel, appConfig.isUseLAF());
-        //        SupportFunctions.setEntityWindowCheckboxValue(useDarkPanel, appConfig.isUseDark());
-        //        SupportFunctions.setEntityWindowJTextfieldValue(
-        //                backupFolderPath, Config.getConfig().getBackupsFolderPath());
-        //        SupportFunctions.setEntityWindowJTextfieldValue(
-        //                filesCheckDelayMs, Config.getConfig().getFilesCheckDelayMs());
-        //        SupportFunctions.setEntityWindowJTextfieldValue(
-        //                trayShowTimeMs, Config.getConfig().getTrayShowTimeMs());
-        //        SupportFunctions.setEntityWindowCheckboxValue(
-        //                useRussian, Config.getConfig().isUseRussianLanguage());
+        boolean useManual = workspaceToEdit
+                .getDescriptor()
+                .getBackupsStrategyTypes()
+                .contains(BackupStrategyType.MANUAL.toString());
+        boolean useTime = workspaceToEdit
+                .getDescriptor()
+                .getBackupsStrategyTypes()
+                .contains(BackupStrategyType.BY_TIME.toString());
+        boolean useChange = workspaceToEdit
+                .getDescriptor()
+                .getBackupsStrategyTypes()
+                .contains(BackupStrategyType.ON_CHANGE.toString());
+        List<File> foldersValue = workspaceToEdit.getDescriptor().getFoldersToBackup();
+        List<String> foldersPaths =
+                foldersValue.stream().map(File::getAbsolutePath).toList();
+        String foldersPathsValue = String.join(Constants.getListSeparator(), foldersPaths);
+        List<File> filesValue = workspaceToEdit.getDescriptor().getFilesToBackup();
+        List<String> filesPaths = filesValue.stream().map(File::getAbsolutePath).toList();
+        String filesPathsValue = String.join(Constants.getListSeparator(), filesPaths);
+
+        SupportFunctions.setEntityWindowJTextfieldValue(backupNameInput, workspaceToEdit.getName());
+        SupportFunctions.setEntityWindowJTextfieldValue(
+                backupDateDiffInput, workspaceToEdit.getDescriptor().getBackupDateDiff());
+        SupportFunctions.setEntityWindowCheckboxValue(
+                backupInArchiveInput, workspaceToEdit.getDescriptor().isBackupInArchive());
+        SupportFunctions.setEntityWindowJTextfieldValue(
+                backupPasswordInput, workspaceToEdit.getDescriptor().getBackupPassword());
+        SupportFunctions.setEntityWindowJTextfieldValue(
+                backupPostfixInput, workspaceToEdit.getDescriptor().getBackupPostfix());
+        SupportFunctions.setEntityWindowJTextfieldValue(
+                backupPrefixInput, workspaceToEdit.getDescriptor().getBackupPreffix());
+        SupportFunctions.setEntityWindowCheckboxValue(
+                backupUseTimestampInput, workspaceToEdit.getDescriptor().isBackupUseTimestamps());
+        SupportFunctions.setEntityWindowCheckboxValue(
+                backupUseVersionInput, workspaceToEdit.getDescriptor().isBackupUseVersion());
+        SupportFunctions.setEntityWindowCheckboxValue(backupUseManualStrategyInput, useManual);
+        SupportFunctions.setEntityWindowCheckboxValue(backupUseTimeStrategyInput, useTime);
+        SupportFunctions.setEntityWindowCheckboxValue(backupUseChangeStrategyInput, useChange);
+        SupportFunctions.setEntityWindowJTextfieldValue(backupFoldersInput, foldersPathsValue);
+        SupportFunctions.setEntityWindowJTextfieldValue(backupFilesInput, filesPathsValue);
+        SupportFunctions.setEntityWindowJTextfieldValue(
+                backupRotateAfterInput,
+                Integer.toString(workspaceToEdit.getDescriptor().getRotateAfter()));
     }
 
-    private void addButtonsActionListeners(List<JButton> buttons, List<JComponent> options) {
+    private void addButtonsActionListeners(List<JButton> buttons, List<JComponent> fields) {
         ActionListener listener = e -> {
             String command = e.getActionCommand();
             switch (command) {
-                case "Save":
-                    SupportFunctions.showMessage("Options saved");
-                    setupOptionsFromGUI(options);
+                case "Create":
+                    SupportFunctions.showMessage("Workspace created");
+                    createWorkspaceFromGUI(fields);
+                    this.dispose();
+
+                    break;
+                case "Edit":
+                    SupportFunctions.showMessage("Workspace edited");
+                    editWorkspaceFromGUI(fields);
                     this.dispose();
 
                     break;
@@ -257,37 +327,153 @@ public class CreateEditWorkspaceWindow extends JFrame {
         }
     }
 
-    private void setupOptionsFromGUI(List<JComponent> options) {
-        Config appConfig = Config.getConfig();
+    private void createWorkspaceFromGUI(List<JComponent> fields) {
+        JPanel backupNameInput = (JPanel) fields.get(0);
+        JPanel backupDateDiffInput = (JPanel) fields.get(1);
+        JPanel backupInArchiveInput = (JPanel) fields.get(2);
+        JPanel backupPasswordInput = (JPanel) fields.get(3);
+        JPanel backupPostfixInput = (JPanel) fields.get(4);
+        JPanel backupPrefixInput = (JPanel) fields.get(5);
+        JPanel backupUseTimestampInput = (JPanel) fields.get(6);
+        JPanel backupUseVersionInput = (JPanel) fields.get(7);
+        JPanel backupUseManualStrategyInput = (JPanel) fields.get(8);
+        JPanel backupUseTimeStrategyInput = (JPanel) fields.get(9);
+        JPanel backupUseChangeStrategyInput = (JPanel) fields.get(10);
+        JPanel backupRotateAfterInput = (JPanel) fields.get(15);
 
-        JPanel logAppPanel = (JPanel) options.get(0);
-        JPanel useLafPanel = (JPanel) options.get(1);
-        JPanel useDarkPanel = (JPanel) options.get(2);
-        JPanel backupFolderPathPanel = (JPanel) options.get(3);
-        JPanel filesCheckDelayMsPanel = (JPanel) options.get(4);
-        JPanel trayShowTimeMsPanel = (JPanel) options.get(5);
-        JPanel useRussianPanel = (JPanel) options.get(6);
+        String name = SupportFunctions.getEntityWindowJTextfieldValue(backupNameInput);
+        String dateDiff = SupportFunctions.getEntityWindowJTextfieldValue(backupDateDiffInput);
+        boolean inArchive = SupportFunctions.getEntityWindowCheckboxValue(backupInArchiveInput);
+        String password = SupportFunctions.getEntityWindowJTextfieldValue(backupPasswordInput);
+        String postfix = SupportFunctions.getEntityWindowJTextfieldValue(backupPostfixInput);
+        String prefix = SupportFunctions.getEntityWindowJTextfieldValue(backupPrefixInput);
+        boolean useTimestamp = SupportFunctions.getEntityWindowCheckboxValue(backupUseTimestampInput);
+        boolean useVersion = SupportFunctions.getEntityWindowCheckboxValue(backupUseVersionInput);
+        boolean useManualStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseManualStrategyInput);
+        boolean useTimeStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseTimeStrategyInput);
+        boolean useChangeStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseChangeStrategyInput);
+        String rotateAfter = SupportFunctions.getEntityWindowJTextfieldValue(backupRotateAfterInput);
 
-        boolean logApp = SupportFunctions.getEntityWindowCheckboxValue(logAppPanel);
-        boolean useLaf = SupportFunctions.getEntityWindowCheckboxValue(useLafPanel);
-        boolean useDark = SupportFunctions.getEntityWindowCheckboxValue(useDarkPanel);
-        String backupFolderPath = SupportFunctions.getEntityWindowJTextfieldValue(backupFolderPathPanel);
-        String filesCheckDelayMs = SupportFunctions.getEntityWindowJTextfieldValue(filesCheckDelayMsPanel);
-        String trayShowTimeMs = SupportFunctions.getEntityWindowJTextfieldValue(trayShowTimeMsPanel);
-        boolean useRussian = SupportFunctions.getEntityWindowCheckboxValue(useRussianPanel);
+        List<String> strategies = new ArrayList<>();
 
-        appConfig.setLogApp(logApp);
-        appConfig.setUseLAF(useLaf);
-        appConfig.setUseDark(useDark);
-        appConfig.setBackupsFolderPath(backupFolderPath);
-        appConfig.setFilesCheckDelayMs(filesCheckDelayMs);
-        appConfig.setTrayShowTimeMs(trayShowTimeMs);
-        appConfig.setUseRussianLanguage(useRussian);
+        if (useManualStrategy) {
+            strategies.add(BackupStrategyType.MANUAL.toString());
+        }
+
+        if (useTimeStrategy) {
+            strategies.add(BackupStrategyType.BY_TIME.toString());
+        }
+
+        if (useChangeStrategy) {
+            strategies.add(BackupStrategyType.ON_CHANGE.toString());
+        }
+
+        String strategyTypesValue = String.join(Constants.getListSeparator(), strategies);
+
+        int rotateAfterValue = 0;
 
         try {
-            appConfig.save();
-        } catch (IOException e) {
-            e.printStackTrace();
+            rotateAfterValue = Integer.parseInt(rotateAfter);
+        } catch (NumberFormatException e) {
+            ;
         }
+
+        if (folders == null) {
+            folders = new File[] {};
+        }
+
+        if (files == null) {
+            files = new File[] {};
+        }
+
+        Workspace newWorkspace = new Workspace(name);
+        WorkspaceDescriptor newWorkspaceDescriptor = new WorkspaceDescriptor(
+                password,
+                dateDiff,
+                useTimestamp,
+                useVersion,
+                prefix,
+                postfix,
+                inArchive,
+                List.of(folders),
+                List.of(files),
+                strategyTypesValue,
+                newWorkspace,
+                rotateAfterValue);
+
+        newWorkspace.setDescriptor(newWorkspaceDescriptor);
+
+        this.backupController.createNewWorkspace(newWorkspace);
+    }
+
+    private void editWorkspaceFromGUI(List<JComponent> fields) {
+        JPanel backupDateDiffInput = (JPanel) fields.get(1);
+        JPanel backupInArchiveInput = (JPanel) fields.get(2);
+        JPanel backupPasswordInput = (JPanel) fields.get(3);
+        JPanel backupPostfixInput = (JPanel) fields.get(4);
+        JPanel backupPrefixInput = (JPanel) fields.get(5);
+        JPanel backupUseTimestampInput = (JPanel) fields.get(6);
+        JPanel backupUseVersionInput = (JPanel) fields.get(7);
+        JPanel backupUseManualStrategyInput = (JPanel) fields.get(8);
+        JPanel backupUseTimeStrategyInput = (JPanel) fields.get(9);
+        JPanel backupUseChangeStrategyInput = (JPanel) fields.get(10);
+        JPanel backupRotateAfterInput = (JPanel) fields.get(15);
+
+        String dateDiff = SupportFunctions.getEntityWindowJTextfieldValue(backupDateDiffInput);
+        boolean inArchive = SupportFunctions.getEntityWindowCheckboxValue(backupInArchiveInput);
+        String password = SupportFunctions.getEntityWindowJTextfieldValue(backupPasswordInput);
+        String postfix = SupportFunctions.getEntityWindowJTextfieldValue(backupPostfixInput);
+        String prefix = SupportFunctions.getEntityWindowJTextfieldValue(backupPrefixInput);
+        boolean useTimestamp = SupportFunctions.getEntityWindowCheckboxValue(backupUseTimestampInput);
+        boolean useVersion = SupportFunctions.getEntityWindowCheckboxValue(backupUseVersionInput);
+        boolean useManualStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseManualStrategyInput);
+        boolean useTimeStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseTimeStrategyInput);
+        boolean useChangeStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseChangeStrategyInput);
+        String rotateAfter = SupportFunctions.getEntityWindowJTextfieldValue(backupRotateAfterInput);
+
+        List<String> strategies = new ArrayList<>();
+
+        if (useManualStrategy) {
+            strategies.add(BackupStrategyType.MANUAL.toString());
+        }
+
+        if (useTimeStrategy) {
+            strategies.add(BackupStrategyType.BY_TIME.toString());
+        }
+
+        if (useChangeStrategy) {
+            strategies.add(BackupStrategyType.ON_CHANGE.toString());
+        }
+
+        String strategyTypesValue = String.join(Constants.getListSeparator(), strategies);
+
+        int rotateAfterValue = 0;
+
+        try {
+            rotateAfterValue = Integer.parseInt(rotateAfter);
+        } catch (NumberFormatException e) {
+            ;
+        }
+
+        WorkspaceDescriptor workspaceDescriptorToEdit = workspaceToEdit.getDescriptor();
+        workspaceDescriptorToEdit.setBackupPassword(password);
+        workspaceDescriptorToEdit.setBackupDateDiff(dateDiff);
+        workspaceDescriptorToEdit.setBackupUseTimestamps(useTimestamp);
+        workspaceDescriptorToEdit.setBackupUseVersion(useVersion);
+        workspaceDescriptorToEdit.setBackupPreffix(prefix);
+        workspaceDescriptorToEdit.setBackupPostfix(postfix);
+        workspaceDescriptorToEdit.setBackupInArchive(inArchive);
+        workspaceDescriptorToEdit.setFoldersToBackup(List.of(folders));
+        workspaceDescriptorToEdit.setFilesToBackup(List.of(files));
+        workspaceDescriptorToEdit.setBackupsStrategyTypes(strategyTypesValue);
+        workspaceDescriptorToEdit.setRotateAfter(rotateAfterValue);
+
+        this.backupController.editWorkspace(workspaceToEdit);
+    }
+
+    private void initController() {
+        List<Workspace> workspaces = SupportFunctions.findWorkspaces(Config.getConfig());
+
+        backupController = new BackupController(workspaces);
     }
 }

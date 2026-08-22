@@ -162,6 +162,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createNewBackup(xenmirror.models.Workspace)" class="member-name-link">createNewBackup</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;backupWorkspace)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createNewWorkspace(xenmirror.models.Workspace)" class="member-name-link">createNewWorkspace</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToCreate)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#editWorkspace(xenmirror.models.Workspace)" class="member-name-link">editWorkspace</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToEdit)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getWorkspaces()" class="member-name-link">getWorkspaces</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -199,6 +205,10 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateWorkspace(xenmirror.models.Workspace)" class="member-name-link">updateWorkspace</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToUpdate)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeWorkspaceDescriptor(java.io.File,xenmirror.models.Workspace)" class="member-name-link">writeWorkspaceDescriptor</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;descriptorFile,
+ <a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToCreate)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -335,6 +345,25 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="removeWorkspace(xenmirror.models.Workspace)">
 <h3>removeWorkspace</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeWorkspace</span><wbr><span class="parameters">(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToRemove)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="createNewWorkspace(xenmirror.models.Workspace)">
+<h3>createNewWorkspace</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">createNewWorkspace</span><wbr><span class="parameters">(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToCreate)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="writeWorkspaceDescriptor(java.io.File,xenmirror.models.Workspace)">
+<h3>writeWorkspaceDescriptor</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeWorkspaceDescriptor</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;descriptorFile,
+ <a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToCreate)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="editWorkspace(xenmirror.models.Workspace)">
+<h3>editWorkspace</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">editWorkspace</span><wbr><span class="parameters">(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToEdit)</span></div>
 </section>
 </li>
 </ul>

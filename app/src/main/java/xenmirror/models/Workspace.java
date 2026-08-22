@@ -43,8 +43,8 @@ public class Workspace {
         this.name = name;
     }
 
-    public WorkspaceDescriptor setDescriptor() {
-        return descriptor;
+    public void setDescriptor(WorkspaceDescriptor descriptor) {
+        this.descriptor = descriptor;
     }
 
     public void setWorkspaceDescriptor(WorkspaceDescriptor descriptor) {

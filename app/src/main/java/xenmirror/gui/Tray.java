@@ -5,20 +5,16 @@ import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
-import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import xenmirror.controllers.BackupController;
-import xenmirror.models.Workspace;
 import xenmirror.utils.Config;
 import xenmirror.utils.Constants;
 import xenmirror.utils.Logger;
@@ -31,16 +27,12 @@ public class Tray {
 
     private BackupController controller;
 
-    private static final String TRAY_ICON_TOOLTIP_NAME = "ShodanEye";
-    private static final String BACKUP_BUTTON_NAME = "Backup";
-    private static final String RESTORE_BUTTON_NAME = "Restore";
+    private static final String TRAY_ICON_TOOLTIP_NAME = "XenMirror";
+    private static final String MANAGE_BACKUPS_BUTTON_NAME = "Manage backups";
+    private static final String SETTINGS_BUTTON_NAME = "Settings";
     private static final String EXIT_BUTTON_NAME = "Exit";
     private static final String WELCOME_MESSAGE = "App started!";
     private static final String EXIT_MESSAGE = "Goodbye!";
-    private static final String START_BACKUP_MESSAGE = "Backup started!";
-    private static final String END_BACKUP_MESSAGE = "Backup ended!";
-    private static final String START_RESTORE_MESSAGE = "Restore started!";
-    private static final String END_RESTORE_MESSAGE = "Restore ended!";
     private static final boolean IMAGE_IS_AUTOSIZED = true;
 
     public Tray(BackupController controller) {
@@ -67,8 +59,7 @@ public class Tray {
             }
         }
 
-        URL appIconUrl = Tray.class.getResource(Constants.getGuiImageIconResourcePath());
-        icon = Toolkit.getDefaultToolkit().getImage(appIconUrl);
+        icon = SupportFunctions.getAppIcon();
 
         JPopupMenu trayMenu = new JPopupMenu();
         addItemsToTrayMenu(trayMenu);
@@ -84,23 +75,23 @@ public class Tray {
     private void addItemsToTrayMenu(JPopupMenu trayMenu) {
         Logger.printApplicationLog("Create tray items", "Tray");
 
-        JMenuItem backupItem = new JMenuItem(BACKUP_BUTTON_NAME);
-        backupItem.addActionListener(new ActionListener() {
+        JMenuItem manageBackups = new JMenuItem(MANAGE_BACKUPS_BUTTON_NAME);
+        manageBackups.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                makeBackup();
+                manageBackups();
             }
         });
-        trayMenu.add(backupItem);
+        trayMenu.add(manageBackups);
 
-        JMenuItem restoreItem = new JMenuItem(RESTORE_BUTTON_NAME);
-        restoreItem.addActionListener(new ActionListener() {
+        JMenuItem settings = new JMenuItem(SETTINGS_BUTTON_NAME);
+        settings.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                makeRestore();
+                settings();
             }
         });
-        trayMenu.add(restoreItem);
+        trayMenu.add(settings);
 
         JMenuItem item = new JMenuItem(EXIT_BUTTON_NAME);
         item.addActionListener(new ActionListener() {
@@ -112,32 +103,17 @@ public class Tray {
         trayMenu.add(item);
     }
 
-    private void makeBackup() {
-        Logger.printApplicationLog("Make backup", "Tray");
+    private void manageBackups() {
+        Logger.printApplicationLog("Manage backups", "Tray");
 
-        trayIcon.displayMessage(Constants.getAppName(), START_BACKUP_MESSAGE, TrayIcon.MessageType.INFO);
-
-        List<Workspace> workspaces = controller.getWorkspaces();
-
-        for (Workspace workspace : workspaces) {
-            controller.createNewBackup(workspace);
-        }
-
-        trayIcon.displayMessage(Constants.getAppName(), END_BACKUP_MESSAGE, TrayIcon.MessageType.INFO);
+        // TODO
     }
 
-    private void makeRestore() {
-        Logger.printApplicationLog("Make restore", "Tray");
+    private void settings() {
+        Logger.printApplicationLog("Settings", "Tray");
 
-        trayIcon.displayMessage(Constants.getAppName(), START_RESTORE_MESSAGE, TrayIcon.MessageType.INFO);
-
-        List<Workspace> workspaces = controller.getWorkspaces();
-
-        for (Workspace workspace : workspaces) {
-            controller.restore(workspace);
-        }
-
-        trayIcon.displayMessage(Constants.getAppName(), END_RESTORE_MESSAGE, TrayIcon.MessageType.INFO);
+        OptionsWindow optionsWindow = new OptionsWindow();
+        optionsWindow.showWindow();
     }
 
     private void makeExit() {

@@ -1,5 +1,8 @@
 package xenmirror.utils;
 
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -25,6 +29,16 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
@@ -37,6 +51,108 @@ import xenmirror.models.WorkspaceDescriptor;
 
 public class SupportFunctions {
     private static final boolean ENCRYPTION_DEFAULT_PARAM = true;
+
+    public static Image getAppIcon() {
+        Image appIcon = null;
+
+        URL appIconUrl = SupportFunctions.class.getResource(Constants.getGuiImageIconResourcePath());
+        appIcon = Toolkit.getDefaultToolkit().getImage(appIconUrl);
+
+        return appIcon;
+    }
+
+    public static JPanel getEntityWindowCheckbox(String label) {
+        JPanel result = null;
+
+        result = new JPanel();
+        BoxLayout layout = new BoxLayout(result, BoxLayout.X_AXIS);
+        result.setLayout(layout);
+
+        JCheckBox input = new JCheckBox();
+
+        result.add(new JLabel(label));
+        result.add(new JLabel(Constants.getSpace()));
+        result.add(input);
+
+        return result;
+    }
+
+    public static void addChildPanelWithGap(JPanel panel, JPanel child, int gap) {
+        panel.add(child);
+        panel.add(Box.createRigidArea(new Dimension(gap, gap)));
+    }
+
+    public static void addButtonWithGap(JPanel panel, JButton button, int gap) {
+        panel.add(button);
+        panel.add(Box.createRigidArea(new Dimension(gap, gap)));
+    }
+
+    public static void setEntityWindowCheckboxValue(JPanel panel, boolean value) {
+        int checkboxIndex = 2;
+
+        JCheckBox checkbox = (JCheckBox) panel.getComponent(checkboxIndex);
+        checkbox.getModel().setSelected(value);
+    }
+
+    public static void setEntityWindowJTextfieldValue(JPanel panel, String value) {
+        int jtextfieldIndex = 2;
+
+        JTextField input = (JTextField) panel.getComponent(jtextfieldIndex);
+        input.setText(value);
+    }
+
+    public static File chooseFolder() {
+        File selectedFile = null;
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int state = fileChooser.showOpenDialog(null);
+
+        if (state == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+        }
+
+        return selectedFile;
+    }
+
+    public static boolean getEntityWindowCheckboxValue(JPanel panel) {
+        int checkboxIndex = 2;
+
+        JCheckBox checkbox = (JCheckBox) panel.getComponent(checkboxIndex);
+        return checkbox.isSelected();
+    }
+
+    public static String getEntityWindowJTextfieldValue(JPanel panel) {
+        int jtextfieldIndex = 2;
+
+        JTextField input = (JTextField) panel.getComponent(jtextfieldIndex);
+        return input.getText();
+    }
+
+    public static JPanel getEntityWindowJTextfield(String label) {
+        JPanel result = null;
+
+        result = new JPanel();
+        BoxLayout layout = new BoxLayout(result, BoxLayout.X_AXIS);
+        result.setLayout(layout);
+
+        JTextField input = new JTextField();
+
+        result.add(new JLabel(label));
+        result.add(new JLabel(Constants.getSpace()));
+        result.add(input);
+
+        return result;
+    }
+
+    public static void showMessage(String message) {
+        JOptionPane.showMessageDialog(null, message, "Information", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void addChildWithGap(JPanel panel, JComponent child, int gap) {
+        panel.add(child);
+        panel.add(Box.createRigidArea(new Dimension(gap, gap)));
+    }
 
     public static void correctExit() {
         Logger.printApplicationLog("Correct exit", "SupportFunctions");

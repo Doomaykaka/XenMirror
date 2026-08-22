@@ -280,4 +280,17 @@ public class BackupController {
     public List<Workspace> getWorkspaces() {
         return workspaces;
     }
+
+    public void removeWorkspace(Workspace workspaceToRemove) {
+        if (workspaces.remove(workspaceToRemove)) {
+            File backupsFolder = new File(Config.getConfig().getBackupsFolderPath());
+            File workspaceFolder = new File(backupsFolder, workspaceToRemove.getName());
+
+            if (!workspaceFolder.exists()) {
+                return;
+            }
+
+            SupportFunctions.clearFolder(workspaceFolder);
+        }
+    }
 }

@@ -115,6 +115,34 @@ public class SupportFunctions {
         return selectedFile;
     }
 
+    public static File[] chooseFolders() {
+        File[] selectedFolders = null;
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int state = fileChooser.showOpenDialog(null);
+
+        if (state == JFileChooser.APPROVE_OPTION) {
+            selectedFolders = fileChooser.getSelectedFiles();
+        }
+
+        return selectedFolders;
+    }
+
+    public static File[] chooseFiles() {
+        File[] selectedFiles = null;
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        int state = fileChooser.showOpenDialog(null);
+
+        if (state == JFileChooser.APPROVE_OPTION) {
+            selectedFiles = fileChooser.getSelectedFiles();
+        }
+
+        return selectedFiles;
+    }
+
     public static boolean getEntityWindowCheckboxValue(JPanel panel) {
         int checkboxIndex = 2;
 

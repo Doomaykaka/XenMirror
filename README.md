@@ -130,7 +130,7 @@ backup-use-version=false
 backups-strategy-types=ON_CHANGE
 files-to-backup=
 folders-to-backup=D:\Test
-delete-backups-older-than=
+rotate-after=
 ```
 
 ***

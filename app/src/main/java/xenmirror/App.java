@@ -1,6 +1,10 @@
 package xenmirror;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.util.List;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import xenmirror.controllers.BackupController;
 import xenmirror.gui.Tray;
 import xenmirror.models.Workspace;
@@ -20,12 +24,32 @@ public class App {
         Logger.printApplicationLog("App started", "App");
 
         Config appConfig = Config.getConfig();
+
+        initAppGUI();
+
         List<Workspace> workspaces = SupportFunctions.findWorkspaces(appConfig);
 
         BackupController controller = new BackupController(workspaces);
 
         Tray tray = new Tray(controller);
         tray.show();
+    }
+
+    private static void initAppGUI() {
+        if (Config.getConfig().isUseLAF()) {
+            FlatIntelliJLaf.setup();
+            try {
+                if (Config.getConfig().isUseDark()) {
+                    UIManager.setLookAndFeel(new FlatDarkLaf());
+                } else {
+                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
+                }
+            } catch (UnsupportedLookAndFeelException e) {
+                Logger.printApplicationLog("GUI style setup error", "Tray");
+                Logger.printApplicationLog(e.getMessage(), "Tray");
+                e.printStackTrace();
+            }
+        }
     }
 
     public static boolean isClosed() {

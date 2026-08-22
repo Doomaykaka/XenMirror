@@ -1,7 +1,5 @@
 package xenmirror.gui;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.SystemTray;
@@ -12,8 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import xenmirror.controllers.BackupController;
 import xenmirror.utils.Config;
 import xenmirror.utils.Constants;
@@ -43,21 +39,6 @@ public class Tray {
 
     private void init() {
         Logger.printApplicationLog("Tray init", "Tray");
-
-        if (Config.getConfig().isUseLAF()) {
-            FlatIntelliJLaf.setup();
-            try {
-                if (Config.getConfig().isUseDark()) {
-                    UIManager.setLookAndFeel(new FlatDarkLaf());
-                } else {
-                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
-                }
-            } catch (UnsupportedLookAndFeelException e) {
-                Logger.printApplicationLog("GUI style setup error", "Tray");
-                Logger.printApplicationLog(e.getMessage(), "Tray");
-                e.printStackTrace();
-            }
-        }
 
         icon = SupportFunctions.getAppIcon();
 

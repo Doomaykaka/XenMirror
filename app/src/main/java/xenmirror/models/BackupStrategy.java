@@ -184,6 +184,10 @@ public class BackupStrategy {
             BackupDescriptor backupDescriptor, Workspace workspace, WorkspaceDescriptor workspaceDescriptor) {
         File backup = null;
 
+        if (workspaceDescriptor == null) {
+            return backup;
+        }
+
         List<String> filesToBackup = SupportFunctions.listRepresentationToList(
                 SupportFunctions.listToReprepsentationsList(workspaceDescriptor.getFilesToBackup()));
         List<String> foldersToBackup = SupportFunctions.listRepresentationToList(

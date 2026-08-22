@@ -140,7 +140,11 @@ public class ManageBackupsWindow extends JFrame {
 
     private void editWorkspace(Workspace workspace) {
         CreateEditWorkspaceWindow createEditWorkspaceWindow = new CreateEditWorkspaceWindow(workspace);
-        createEditWorkspaceWindow.showWindow();
+        createEditWorkspaceWindow.showWindow(() -> {
+            SwingUtilities.invokeLater(() -> {
+                refreshTable();
+            });
+        });
     }
 
     private void removeWorkspace(Workspace workspace) {
@@ -189,12 +193,16 @@ public class ManageBackupsWindow extends JFrame {
 
         builder.append(workspace.getName());
 
-        tableModel.addRow(new Object[] {builder.toString(), workspace, workspace, workspace});
+        tableModel.addRow(new Object[] {builder.toString(), workspace, workspace, workspace, workspace});
     }
 
     private void createNewWorkspace() {
         CreateEditWorkspaceWindow createEditWorkspaceWindow = new CreateEditWorkspaceWindow();
-        createEditWorkspaceWindow.showWindow();
+        createEditWorkspaceWindow.showWindow(() -> {
+            SwingUtilities.invokeLater(() -> {
+                refreshTable();
+            });
+        });
     }
 
     public void showWindow() {

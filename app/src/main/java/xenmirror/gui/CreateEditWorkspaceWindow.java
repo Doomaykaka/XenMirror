@@ -29,6 +29,8 @@ public class CreateEditWorkspaceWindow extends JFrame {
     private File[] files;
     private File[] folders;
 
+    private Runnable onClose;
+
     public CreateEditWorkspaceWindow(Workspace workspaceToEdit) {
         boolean isResizable = false;
 
@@ -86,7 +88,9 @@ public class CreateEditWorkspaceWindow extends JFrame {
         initController();
     }
 
-    public void showWindow() {
+    public void showWindow(Runnable onClose) {
+        this.onClose = onClose;
+
         setVisible(true);
     }
 
@@ -386,6 +390,11 @@ public class CreateEditWorkspaceWindow extends JFrame {
             files = new File[] {};
         }
 
+        if (name == null || (!useManualStrategy && !useTimeStrategy && !useChangeStrategy)) {
+            SupportFunctions.showMessage("Workspace bad data");
+            return;
+        }
+
         Workspace newWorkspace = new Workspace(name);
         WorkspaceDescriptor newWorkspaceDescriptor = new WorkspaceDescriptor(
                 password,
@@ -404,6 +413,10 @@ public class CreateEditWorkspaceWindow extends JFrame {
         newWorkspace.setDescriptor(newWorkspaceDescriptor);
 
         this.backupController.createNewWorkspace(newWorkspace);
+
+        if (this.onClose != null) {
+            this.onClose.run();
+        }
     }
 
     private void editWorkspaceFromGUI(List<JComponent> fields) {
@@ -455,6 +468,11 @@ public class CreateEditWorkspaceWindow extends JFrame {
             ;
         }
 
+        if (!useManualStrategy && !useTimeStrategy && !useChangeStrategy) {
+            SupportFunctions.showMessage("Workspace bad data");
+            return;
+        }
+
         WorkspaceDescriptor workspaceDescriptorToEdit = workspaceToEdit.getDescriptor();
         workspaceDescriptorToEdit.setBackupPassword(password);
         workspaceDescriptorToEdit.setBackupDateDiff(dateDiff);
@@ -469,6 +487,10 @@ public class CreateEditWorkspaceWindow extends JFrame {
         workspaceDescriptorToEdit.setRotateAfter(rotateAfterValue);
 
         this.backupController.editWorkspace(workspaceToEdit);
+
+        if (this.onClose != null) {
+            this.onClose.run();
+        }
     }
 
     private void initController() {

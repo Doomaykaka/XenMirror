@@ -695,7 +695,7 @@ public class SupportFunctions {
         property.setProperty(propertyName, propertyValueRepresentation);
     }
 
-    public static void clearFolder(File folder) {
+    public static synchronized void clearFolder(File folder) {
         for (File entry : folder.listFiles()) {
             if (entry.isDirectory()) {
                 clearFolder(entry);
@@ -710,7 +710,11 @@ public class SupportFunctions {
 
         Backup result = null;
 
-        if (folder == null || !folder.exists() || !folder.isDirectory() || workspace == null) {
+        if (folder == null
+                || !folder.exists()
+                || !folder.isDirectory()
+                || workspace == null
+                || folder.listFiles().length == 0) {
             Logger.printApplicationLog("Bad backup folder parsing input", "SupportFunctions");
             return result;
         }
@@ -900,6 +904,10 @@ public class SupportFunctions {
             e.printStackTrace();
         }
 
+        if (filepaths.isEmpty() && folderpaths.isEmpty()) {
+            return result;
+        }
+
         List<File> filesToBackup = listOfPathsToListOfFiles(listRepresentationToList(filepaths));
         List<File> foldersToBackup = listOfPathsToListOfFiles(listRepresentationToList(folderpaths));
 
@@ -907,10 +915,22 @@ public class SupportFunctions {
 
         result = new BackupDescriptor(foldersToBackup, filesToBackup, isSecured, needDataCheck);
 
-        result.setVersion(Long.parseLong(version));
+        long versionValue = 0;
+
+        try {
+            versionValue = Long.parseLong(version);
+        } catch (NumberFormatException e) {
+            ;
+        }
+
+        result.setVersion(versionValue);
         result.setChangeStamp(changestamp);
-        result.setFilesCount(Integer.parseInt(filesCount));
-        result.setFilesCount(Integer.parseInt(filesCount));
+
+        try {
+            result.setFilesCount(Integer.parseInt(filesCount));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
 
         return result;
     }
@@ -960,13 +980,17 @@ public class SupportFunctions {
             try {
                 fileInDestination.createNewFile();
 
-                FileInputStream srcStream = new FileInputStream(source);
-                FileChannel src = srcStream.getChannel();
-                FileChannel dest = fileInDestinationW.getChannel();
+                try (FileInputStream srcStream = new FileInputStream(source)) {
+                    FileChannel src = srcStream.getChannel();
+                    FileChannel dest = fileInDestinationW.getChannel();
 
-                dest.transferFrom(src, Constants.getStartIndex(), src.size());
+                    dest.transferFrom(src, Constants.getStartIndex(), src.size());
+                } catch (IOException e) {
+                    Logger.printApplicationLog("file copy error", "SupportFunctions");
+                    Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
+                    e.printStackTrace();
+                }
 
-                srcStream.close();
                 fileInDestinationW.close();
             } catch (IOException e) {
                 Logger.printApplicationLog("file copy error", "SupportFunctions");
@@ -1004,6 +1028,10 @@ public class SupportFunctions {
             if (last == null) {
                 last = workspaceBackup;
                 continue;
+            }
+
+            if (last.getDescriptor() == null || workspaceBackup.getDescriptor() == null) {
+                return last;
             }
 
             Instant lastDate = last.getDescriptor().getChangeStampAsInstant();
@@ -1145,6 +1173,11 @@ public class SupportFunctions {
                 try {
                     WorkspaceDescriptor workspaceDescriptor =
                             parseWorkspaceDescriptor(newWorkspace, Config.getConfig());
+
+                    if (workspaceDescriptor == null) {
+                        continue;
+                    }
+
                     newWorkspace.setWorkspaceDescriptor(workspaceDescriptor);
                     workspaceDescriptor.setWorkspace(newWorkspace);
                 } catch (IOException e) {
@@ -1195,15 +1228,20 @@ public class SupportFunctions {
                 .getAbsolutePath());
 
         if (!pathToDescriptor.toFile().exists()) {
-            throw new FileNotFoundException(
-                    Constants.getWorkspaceDescripterNotFoundMessage() + pathToDescriptor.toString());
+            workspaceFolder.delete();
+            return parsedDescriptor;
         }
 
-        FileInputStream descripterFIS = new FileInputStream(pathToDescriptor.toString());
-        InputStreamReader reader =
-                new InputStreamReader(descripterFIS, Config.getConfig().getSystemEncoding());
-        Properties properties = new Properties();
-        properties.load(reader);
+        Properties properties = null;
+
+        try (FileInputStream descripterFIS = new FileInputStream(pathToDescriptor.toString())) {
+            InputStreamReader reader =
+                    new InputStreamReader(descripterFIS, Config.getConfig().getSystemEncoding());
+            properties = new Properties();
+            properties.load(reader);
+        } catch (IOException e) {
+            Logger.printApplicationLog("cant read workspace descripter", "SupportFunctions");
+        }
 
         String backupPassword =
                 SupportFunctions.getStringProperty(properties, Constants.getPropertyNameBackupPassword());

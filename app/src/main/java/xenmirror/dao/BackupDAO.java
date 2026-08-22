@@ -225,8 +225,9 @@ public class BackupDAO {
 
             readAndConnectBackupDescriptor(backupFolder, parsed);
 
-            if (parsed.getDescriptor().getVersion()
-                    == backupToRemove.getDescriptor().getVersion()) {
+            if (parsed.getDescriptor() != null
+                    && parsed.getDescriptor().getVersion()
+                            == backupToRemove.getDescriptor().getVersion()) {
                 currentBackupFolder = backupFolder;
                 break;
             }
@@ -254,6 +255,10 @@ public class BackupDAO {
         }
 
         BackupDescriptor descriptor = SupportFunctions.readBackupDescriptor(backupDescriptor);
+
+        if (descriptor == null) {
+            return;
+        }
 
         backup.setDescriptor(descriptor);
         descriptor.setBackup(backup);

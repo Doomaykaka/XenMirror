@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -143,7 +144,8 @@ public class BackupController {
         }
 
         if (workspaceBackups.size() > maxBackups) {
-            workspaceBackups.sort(Comparator.comparing(bd -> bd.getDescriptor().getChangeStampAsInstant()));
+            workspaceBackups.sort(Comparator.comparing(
+                    bd -> bd.getDescriptor() != null ? bd.getDescriptor().getChangeStampAsInstant() : Instant.now()));
 
             for (int i = 0; i < workspaceBackups.size() - maxBackups; i++) {
                 dao.removeBackup(workspaceBackups.get(i));
@@ -295,6 +297,7 @@ public class BackupController {
             }
 
             SupportFunctions.clearFolder(workspaceFolder);
+            workspaceFolder.delete();
         }
     }
 

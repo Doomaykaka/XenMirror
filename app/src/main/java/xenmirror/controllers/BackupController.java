@@ -251,7 +251,18 @@ public class BackupController {
                     public void run() {
                         while (!App.isClosed()) {
                             try {
-                                createNewBackup(workspace);
+                                WorkspaceDescriptor descriptor = workspace.getDescriptor();
+
+                                boolean needBackupCheck = descriptor
+                                                .getBackupsStrategyTypes()
+                                                .contains(BackupStrategyType.BY_TIME.toString())
+                                        || descriptor
+                                                .getBackupsStrategyTypes()
+                                                .contains(BackupStrategyType.ON_CHANGE.toString());
+
+                                if (needBackupCheck) {
+                                    createNewBackup(workspace);
+                                }
 
                                 Long delay = Long.parseLong(Config.getConfig().getFilesCheckDelayMs());
                                 Thread.sleep(delay);

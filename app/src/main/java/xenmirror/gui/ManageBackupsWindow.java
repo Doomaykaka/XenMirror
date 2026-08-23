@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import xenmirror.controllers.BackupController;
+import xenmirror.models.BackupStrategyType;
 import xenmirror.models.Workspace;
 import xenmirror.utils.SupportFunctions;
 
@@ -129,7 +130,11 @@ public class ManageBackupsWindow extends JFrame {
     private void backup(int row) {
         Workspace workspace = (Workspace) table.getModel().getValueAt(row, 2);
 
-        backupController.createNewBackup(workspace);
+        if (workspace.getDescriptor().getBackupsStrategyTypes().contains(BackupStrategyType.MANUAL.toString())) {
+            backupController.createNewBackup(workspace);
+        } else {
+            SupportFunctions.showMessage("Cant backup manual, please change workspace strategy");
+        }
     }
 
     private void editWorkspace(int row) {
@@ -171,7 +176,7 @@ public class ManageBackupsWindow extends JFrame {
             if (answer == 0) {
                 backupController.removeWorkspace(workspace);
 
-                SupportFunctions.showMessage("Character removed");
+                SupportFunctions.showMessage("Workspace removed");
             }
 
             refreshTable();

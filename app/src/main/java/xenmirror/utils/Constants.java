@@ -40,7 +40,6 @@ public class Constants {
     private static final String PROPERTY_NAME_LOG_APP = "log-app";
     private static final String PROPERTY_NAME_LAF_IS_NEEDED = "laf-is-needed";
     private static final String PROPERTY_NAME_DARK_THEME_IS_NEEDED = "dark-is-needed";
-    private static final String PROPERTY_NAME_RUSSIAN_LANGUAGE_IS_NEEDED = "russian-is-needed";
     private static final String PROPERTY_NAME_BACKUP_PASSWORD = "backup-password";
     private static final String PROPERTY_NAME_BACKUP_DATE_DIFF = "backup-date-diff";
     private static final String PROPERTY_NAME_BACKUP_FOLDER_PATH = "backup-folder-path";
@@ -165,10 +164,6 @@ public class Constants {
 
     public static String getPropertyNameDarkThemeIsNeeded() {
         return PROPERTY_NAME_DARK_THEME_IS_NEEDED;
-    }
-
-    public static String getPropertyNameRussianLanguageIsNeeded() {
-        return PROPERTY_NAME_RUSSIAN_LANGUAGE_IS_NEEDED;
     }
 
     public static String getConfigDefaultStringPropertiesValues() {

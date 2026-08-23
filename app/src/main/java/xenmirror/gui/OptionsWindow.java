@@ -57,7 +57,6 @@ public class OptionsWindow extends JFrame {
         JButton backupFolderPathChooserInput = new JButton("Backup folder path");
         JPanel filesCheckDelayMsInput = SupportFunctions.getEntityWindowJTextfield("Files check delay");
         JPanel trayShowTimeMs = SupportFunctions.getEntityWindowJTextfield("Tray show time ms");
-        JPanel useRussian = SupportFunctions.getEntityWindowCheckbox("Use Russian language");
 
         addChooseBackupFolderActionListener(backupFolderPathInput, backupFolderPathChooserInput);
 
@@ -69,7 +68,6 @@ public class OptionsWindow extends JFrame {
         SupportFunctions.addChildWithGap(panel, backupFolderPathChooserInput, gap);
         SupportFunctions.addChildPanelWithGap(panel, filesCheckDelayMsInput, gap);
         SupportFunctions.addChildPanelWithGap(panel, trayShowTimeMs, gap);
-        SupportFunctions.addChildPanelWithGap(panel, useRussian, gap);
 
         options.add(chkLogApp);
         options.add(chkUseLaf);
@@ -77,7 +75,6 @@ public class OptionsWindow extends JFrame {
         options.add(backupFolderPathInput);
         options.add(filesCheckDelayMsInput);
         options.add(trayShowTimeMs);
-        options.add(useRussian);
 
         windowLayer.add(panel);
 
@@ -133,7 +130,6 @@ public class OptionsWindow extends JFrame {
         JPanel backupFolderPath = (JPanel) options.get(3);
         JPanel filesCheckDelayMs = (JPanel) options.get(4);
         JPanel trayShowTimeMs = (JPanel) options.get(5);
-        JPanel useRussian = (JPanel) options.get(6);
 
         SupportFunctions.setEntityWindowCheckboxValue(logAppPanel, appConfig.isLogApp());
         SupportFunctions.setEntityWindowCheckboxValue(useLafPanel, appConfig.isUseLAF());
@@ -144,8 +140,6 @@ public class OptionsWindow extends JFrame {
                 filesCheckDelayMs, Config.getConfig().getFilesCheckDelayMs());
         SupportFunctions.setEntityWindowJTextfieldValue(
                 trayShowTimeMs, Config.getConfig().getTrayShowTimeMs());
-        SupportFunctions.setEntityWindowCheckboxValue(
-                useRussian, Config.getConfig().isUseRussianLanguage());
     }
 
     private void addButtonsActionListeners(List<JButton> buttons, List<JComponent> options) {
@@ -180,7 +174,6 @@ public class OptionsWindow extends JFrame {
         JPanel backupFolderPathPanel = (JPanel) options.get(3);
         JPanel filesCheckDelayMsPanel = (JPanel) options.get(4);
         JPanel trayShowTimeMsPanel = (JPanel) options.get(5);
-        JPanel useRussianPanel = (JPanel) options.get(6);
 
         boolean logApp = SupportFunctions.getEntityWindowCheckboxValue(logAppPanel);
         boolean useLaf = SupportFunctions.getEntityWindowCheckboxValue(useLafPanel);
@@ -188,7 +181,6 @@ public class OptionsWindow extends JFrame {
         String backupFolderPath = SupportFunctions.getEntityWindowJTextfieldValue(backupFolderPathPanel);
         String filesCheckDelayMs = SupportFunctions.getEntityWindowJTextfieldValue(filesCheckDelayMsPanel);
         String trayShowTimeMs = SupportFunctions.getEntityWindowJTextfieldValue(trayShowTimeMsPanel);
-        boolean useRussian = SupportFunctions.getEntityWindowCheckboxValue(useRussianPanel);
 
         appConfig.setLogApp(logApp);
         appConfig.setUseLAF(useLaf);
@@ -196,7 +188,6 @@ public class OptionsWindow extends JFrame {
         appConfig.setBackupsFolderPath(backupFolderPath);
         appConfig.setFilesCheckDelayMs(filesCheckDelayMs);
         appConfig.setTrayShowTimeMs(trayShowTimeMs);
-        appConfig.setUseRussianLanguage(useRussian);
 
         try {
             appConfig.save();

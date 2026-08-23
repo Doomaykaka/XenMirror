@@ -42,6 +42,8 @@ public class WorkspaceBackupsWindow extends JFrame {
 
         setLayout(new BorderLayout());
 
+        setIconImage(SupportFunctions.getAppIcon());
+
         this.backupController = backupController;
         this.backupsWorkspace = backupsWorkspace;
 

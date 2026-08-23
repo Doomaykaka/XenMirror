@@ -13,7 +13,6 @@ public class Config {
     private boolean logApp;
     private boolean useLAF;
     private boolean useDark;
-    private boolean useRussianLanguage;
     private String encoding;
     private String filesCheckDelayMs;
     private String trayShowTimeMs;
@@ -51,8 +50,6 @@ public class Config {
         this.logApp = SupportFunctions.getBooleanProperty(properties, Constants.getPropertyNameLogApp());
         this.useLAF = SupportFunctions.getBooleanProperty(properties, Constants.getPropertyNameLafIsNeeded());
         this.useDark = SupportFunctions.getBooleanProperty(properties, Constants.getPropertyNameDarkThemeIsNeeded());
-        this.useRussianLanguage =
-                SupportFunctions.getBooleanProperty(properties, Constants.getPropertyNameRussianLanguageIsNeeded());
         this.backupsFolderPath =
                 SupportFunctions.getStringProperty(properties, Constants.getPropertyNameBackupFolderPath());
 
@@ -103,8 +100,6 @@ public class Config {
         SupportFunctions.setBooleanProperty(properties, Constants.getPropertyNameLogApp(), logApp);
         SupportFunctions.setBooleanProperty(properties, Constants.getPropertyNameLafIsNeeded(), useLAF);
         SupportFunctions.setBooleanProperty(properties, Constants.getPropertyNameDarkThemeIsNeeded(), useDark);
-        SupportFunctions.setBooleanProperty(
-                properties, Constants.getPropertyNameRussianLanguageIsNeeded(), useRussianLanguage);
         SupportFunctions.setStringProperty(properties, Constants.getPropertyNameBackupFolderPath(), backupsFolderPath);
 
         properties.store(writer, Constants.getTextDefault());
@@ -124,10 +119,6 @@ public class Config {
         return this.useDark;
     }
 
-    public boolean isUseRussianLanguage() {
-        return useRussianLanguage;
-    }
-
     public void setLogApp(boolean logApp) {
         this.logApp = logApp;
     }
@@ -138,10 +129,6 @@ public class Config {
 
     public void setUseDark(boolean useDark) {
         this.useDark = useDark;
-    }
-
-    public void setUseRussianLanguage(boolean useRussianLanguage) {
-        this.useRussianLanguage = useRussianLanguage;
     }
 
     public String getBackupsFolderPath() {

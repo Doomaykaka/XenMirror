@@ -13,7 +13,7 @@ repositories {
     mavenCentral()
 }
 
-var version = [1, 0, 1]
+var version = [1, 0, 2]
 
 dependencies {
     implementation 'com.diffplug.spotless:spotless-plugin-gradle:7.0.0'

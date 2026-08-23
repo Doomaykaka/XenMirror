@@ -32,6 +32,8 @@ public class ManageWorkspacesWindow extends JFrame {
 
         setLayout(new BorderLayout());
 
+        setIconImage(SupportFunctions.getAppIcon());
+
         this.backupController = backupController;
 
         String[] columnNames = {"Workspace name", "View backups", "Backup", "Edit", "Delete"};

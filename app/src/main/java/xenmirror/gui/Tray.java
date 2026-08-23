@@ -140,11 +140,9 @@ public class Tray {
                 } catch (InterruptedException e) {
                     Logger.printApplicationLog("Tray hide wait error", "Tray");
                     Logger.printApplicationLog(e.getMessage(), "Tray");
-                    e.printStackTrace();
                 } catch (NumberFormatException e) {
                     Logger.printApplicationLog("Bad tray delay", "Tray");
                     Logger.printApplicationLog(e.getMessage(), "Tray");
-                    e.printStackTrace();
                 }
             }
         });
@@ -162,7 +160,6 @@ public class Tray {
         } catch (AWTException e) {
             Logger.printApplicationLog("show tray error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         trayIcon.displayMessage(Constants.getAppName(), WELCOME_MESSAGE, TrayIcon.MessageType.INFO);

@@ -75,7 +75,7 @@ public class Config {
                 instance = new Config();
             } catch (IOException e) {
                 System.out.println("SupportFunctions: config initialize error");
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 

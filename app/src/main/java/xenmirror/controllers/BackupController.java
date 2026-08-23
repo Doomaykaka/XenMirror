@@ -53,7 +53,7 @@ public class BackupController {
         try {
             workspaceDescriptor = SupportFunctions.parseWorkspaceDescriptor(workspace, Config.getConfig());
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.printApplicationLog("Cant prepare workspace", "BackupController");
         }
 
         Set<BackupStrategyType> backupStartegyTypes =
@@ -106,7 +106,6 @@ public class BackupController {
         } catch (IOException e) {
             Logger.printApplicationLog("backup creating error", "BackupController");
             Logger.printApplicationLog(e.getMessage(), "BackupController");
-            e.printStackTrace();
         }
 
         List<String> filesToBackupRerpr = SupportFunctions.listRepresentationToList(
@@ -166,7 +165,6 @@ public class BackupController {
         } catch (IOException e) {
             Logger.printApplicationLog("backup restoring error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         List<String> backupFilePaths = backup.getDescriptor().getFilePaths();
@@ -269,11 +267,9 @@ public class BackupController {
                             } catch (InterruptedException e) {
                                 Logger.printApplicationLog("waiting error", "BackupController");
                                 Logger.printApplicationLog(e.getMessage(), "BackupController");
-                                e.printStackTrace();
                             } catch (NumberFormatException e) {
                                 Logger.printApplicationLog("Bad backup checker delay", "Tray");
                                 Logger.printApplicationLog(e.getMessage(), "Tray");
-                                e.printStackTrace();
                             }
                         }
                     }
@@ -335,7 +331,6 @@ public class BackupController {
             }
         } catch (IOException e) {
             Logger.printApplicationLog("cant create workspace folder", "BackupController");
-            e.printStackTrace();
         }
     }
 
@@ -398,7 +393,6 @@ public class BackupController {
             descriptorFOS.flush();
         } catch (SecurityException | IOException e) {
             Logger.printApplicationLog("Failed to save workspace descriptor file", "BackupController");
-            e.printStackTrace();
         }
     }
 
@@ -480,7 +474,6 @@ public class BackupController {
             descriptorFOS.flush();
         } catch (SecurityException | IOException e) {
             Logger.printApplicationLog("Failed to update workspace descriptor file", "BackupController");
-            e.printStackTrace();
         }
     }
 

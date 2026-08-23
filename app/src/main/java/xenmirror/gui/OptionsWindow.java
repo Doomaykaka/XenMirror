@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import xenmirror.utils.Config;
+import xenmirror.utils.Logger;
 import xenmirror.utils.SupportFunctions;
 
 public class OptionsWindow extends JFrame {
@@ -200,7 +201,8 @@ public class OptionsWindow extends JFrame {
         try {
             appConfig.save();
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.printApplicationLog("App config save error", "OptionsWindow");
+            Logger.printApplicationLog(e.getMessage(), "OptionsWindow");
         }
     }
 }

@@ -185,7 +185,6 @@ public class BackupDAO {
         } catch (IOException e) {
             Logger.printApplicationLog("backup process error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         return saveIsCorrect;

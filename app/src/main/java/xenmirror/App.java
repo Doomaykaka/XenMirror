@@ -48,7 +48,6 @@ public class App {
             } catch (UnsupportedLookAndFeelException e) {
                 Logger.printApplicationLog("GUI style setup error", "Tray");
                 Logger.printApplicationLog(e.getMessage(), "Tray");
-                e.printStackTrace();
             }
         }
     }

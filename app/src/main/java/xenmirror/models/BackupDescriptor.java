@@ -140,7 +140,8 @@ public class BackupDescriptor implements Cloneable {
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logger.printApplicationLog("calculate changestep error", "BackupDescriptor");
+                    Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
                 }
             }
         }
@@ -160,7 +161,8 @@ public class BackupDescriptor implements Cloneable {
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logger.printApplicationLog("calculate changestep error", "BackupDescriptor");
+                    Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
                 }
             }
         }
@@ -190,7 +192,8 @@ public class BackupDescriptor implements Cloneable {
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logger.printApplicationLog("get changestep error", "BackupDescriptor");
+                    Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
                 }
             }
         }
@@ -210,7 +213,8 @@ public class BackupDescriptor implements Cloneable {
                         }
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Logger.printApplicationLog("get changestep error", "BackupDescriptor");
+                    Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
                 }
             }
         }

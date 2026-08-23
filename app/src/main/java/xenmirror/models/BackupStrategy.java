@@ -201,7 +201,6 @@ public class BackupStrategy {
         } catch (IOException e) {
             Logger.printApplicationLog("getting workspace error", "BackupStrategy");
             Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-            e.printStackTrace();
         }
 
         result = prepareBackupStructure(backupDescriptor, workspace, workspaceDescriptor);
@@ -240,7 +239,6 @@ public class BackupStrategy {
         } catch (IOException e) {
             Logger.printApplicationLog("getting backup name error", "BackupStrategy");
             Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-            e.printStackTrace();
         }
 
         String backupFolderName = backupName
@@ -256,7 +254,6 @@ public class BackupStrategy {
                 System.out.println(e.getMessage());
                 Logger.printApplicationLog("backup folder creating error", "BackupStrategy");
                 Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-                e.printStackTrace();
             }
         }
 
@@ -291,7 +288,6 @@ public class BackupStrategy {
                 } catch (IOException e) {
                     Logger.printApplicationLog("archive file creating error", "BackupStrategy");
                     Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-                    e.printStackTrace();
                 }
             }
 
@@ -305,7 +301,6 @@ public class BackupStrategy {
                 } catch (SecurityException e) {
                     Logger.printApplicationLog("backup folder creating error", "BackupStrategy");
                     Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-                    e.printStackTrace();
                 }
             }
 
@@ -321,7 +316,6 @@ public class BackupStrategy {
             } catch (IOException e) {
                 Logger.printApplicationLog("descriptor file creating error", "BackupStrategy");
                 Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-                e.printStackTrace();
             }
         }
 
@@ -344,11 +338,9 @@ public class BackupStrategy {
             } catch (ZipException e) {
                 Logger.printApplicationLog("zip file processing error", "BackupStrategy");
                 Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-                e.printStackTrace();
             } catch (IOException e) {
                 Logger.printApplicationLog("zip file opening error", "BackupStrategy");
                 Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-                e.printStackTrace();
             }
         } else if (workspaceDescriptor.isBackupInArchive()
                 && workspaceDescriptor.getBackupPassword() != null
@@ -360,7 +352,6 @@ public class BackupStrategy {
             } catch (IOException e) {
                 Logger.printApplicationLog("zip file check error", "BackupStrategy");
                 Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-                e.printStackTrace();
             }
         } else {
             try {
@@ -370,7 +361,6 @@ public class BackupStrategy {
             } catch (IOException e) {
                 Logger.printApplicationLog("backup folder opening error", "BackupStrategy");
                 Logger.printApplicationLog(e.getMessage(), "BackupStrategy");
-                e.printStackTrace();
             }
         }
     }

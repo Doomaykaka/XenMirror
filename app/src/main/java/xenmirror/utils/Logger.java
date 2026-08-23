@@ -36,7 +36,7 @@ public class Logger {
                 boolean append = true;
                 printWriter = new PrintWriter(new FileOutputStream(appLogPath, append));
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 
@@ -81,7 +81,7 @@ public class Logger {
             try {
                 appLogFile.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
         }
 

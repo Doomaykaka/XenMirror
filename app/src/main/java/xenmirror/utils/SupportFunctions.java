@@ -235,7 +235,6 @@ public class SupportFunctions {
         } catch (FileNotFoundException e) {
             Logger.printApplicationLog("read file error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         return result;
@@ -255,7 +254,6 @@ public class SupportFunctions {
         } catch (IOException e) {
             Logger.printApplicationLog("getting workspace error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         if (!workspaceDescriptor.isBackupInArchive()) {
@@ -309,7 +307,6 @@ public class SupportFunctions {
         } catch (IOException e) {
             Logger.printApplicationLog("getting workspace error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         ZipParameters zipFileSettings = new ZipParameters();
@@ -342,7 +339,6 @@ public class SupportFunctions {
             } catch (ZipException e) {
                 Logger.printApplicationLog("zip file work with files error", "SupportFunctions");
                 Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-                e.printStackTrace();
             }
         }
     }
@@ -357,7 +353,6 @@ public class SupportFunctions {
             } catch (ZipException e) {
                 Logger.printApplicationLog("zip file work with folders error", "SupportFunctions");
                 Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-                e.printStackTrace();
             }
         }
     }
@@ -370,7 +365,6 @@ public class SupportFunctions {
         } catch (IOException e) {
             Logger.printApplicationLog("zip file close error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
     }
 
@@ -395,7 +389,6 @@ public class SupportFunctions {
         } catch (Exception e) {
             Logger.printApplicationLog("zipping files error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         success = !Constants.getBoolDefault();
@@ -447,7 +440,6 @@ public class SupportFunctions {
         } catch (IOException e) {
             Logger.printApplicationLog("zip file extract error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         return success;
@@ -546,11 +538,9 @@ public class SupportFunctions {
         } catch (FileNotFoundException e) {
             Logger.printApplicationLog("descriptor file search error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         } catch (IOException e) {
             Logger.printApplicationLog("descriptor file write error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         success = !Constants.getBoolDefault();
@@ -726,7 +716,6 @@ public class SupportFunctions {
         } catch (IOException e) {
             Logger.printApplicationLog("backup config creating error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         File[] folderElements = folder.listFiles();
@@ -812,7 +801,6 @@ public class SupportFunctions {
             } catch (SecurityException e) {
                 Logger.printApplicationLog("can't access to backup folder", "SupportFunctions");
                 Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-                e.printStackTrace();
             }
 
             result = new Backup(backupFolder, descriptor);
@@ -828,11 +816,9 @@ public class SupportFunctions {
             } catch (java.util.zip.ZipException e) {
                 Logger.printApplicationLog("archive file read error", "SupportFunctions");
                 Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-                e.printStackTrace();
             } catch (IOException e) {
                 Logger.printApplicationLog("archive file read error", "SupportFunctions");
                 Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-                e.printStackTrace();
             }
 
             result = new Backup(archiveFile, descriptor);
@@ -847,11 +833,9 @@ public class SupportFunctions {
         } catch (ZipException e) {
             Logger.printApplicationLog("encrypted archive file read error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         } catch (IOException e) {
             Logger.printApplicationLog("encrypted archive file read error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         result = new Backup(archiveFile, descriptor);
@@ -898,11 +882,9 @@ public class SupportFunctions {
         } catch (FileNotFoundException e) {
             Logger.printApplicationLog("descriptor file not found error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         } catch (IOException e) {
             Logger.printApplicationLog("descriptor file read error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         if (filepaths.isEmpty() && folderpaths.isEmpty()) {
@@ -930,7 +912,7 @@ public class SupportFunctions {
         try {
             result.setFilesCount(Integer.parseInt(filesCount));
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            ;
         }
 
         return result;
@@ -974,7 +956,6 @@ public class SupportFunctions {
         } catch (FileNotFoundException e) {
             Logger.printApplicationLog("file open error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         if (fileInDestination.exists()) {
@@ -989,14 +970,12 @@ public class SupportFunctions {
                 } catch (IOException e) {
                     Logger.printApplicationLog("file copy error", "SupportFunctions");
                     Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-                    e.printStackTrace();
                 }
 
                 fileInDestinationW.close();
             } catch (IOException e) {
                 Logger.printApplicationLog("file copy error", "SupportFunctions");
                 Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-                e.printStackTrace();
             }
         }
     }
@@ -1149,7 +1128,6 @@ public class SupportFunctions {
         } catch (IOException e) {
             Logger.printApplicationLog("backup descriptor creating error", "SupportFunctions");
             Logger.printApplicationLog(e.getMessage(), "SupportFunctions");
-            e.printStackTrace();
         }
 
         List<File> filesToBackup = descriptor.getFilesToBackup();
@@ -1196,7 +1174,7 @@ public class SupportFunctions {
                     newWorkspace.setWorkspaceDescriptor(workspaceDescriptor);
                     workspaceDescriptor.setWorkspace(newWorkspace);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    ;
                 }
 
                 result.add(newWorkspace);

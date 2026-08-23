@@ -13,7 +13,7 @@ repositories {
     mavenCentral()
 }
 
-var version = [1, 0, 2]
+var version = [1, 0, 3]
 
 dependencies {
     implementation 'com.diffplug.spotless:spotless-plugin-gradle:7.0.0'
@@ -108,4 +108,18 @@ checkstyleMain{
 
 checkstyleTest{
 	ant.lifecycleLogLevel = "INFO"
+}
+
+launch4j {
+  mainClassName = 'xenmirror.App'
+  icon = "${project.rootDir}/assets/app_icon.ico"
+  dontWrapJar = true
+  headerType = "gui"
+  jarTask = jar
+  outfile = "XenMirror.exe"
+  priority = "normal"
+  stayAlive = false
+  restartOnCrash = false
+  bundledJrePath = "JRE"
+  cmdLine = '%ARGS%'
 }

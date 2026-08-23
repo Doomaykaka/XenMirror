@@ -2,7 +2,10 @@ package xenmirror.models;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -97,13 +100,26 @@ public class BackupStrategy {
             throws IOException {
         boolean backupNeeded = Constants.getBoolDefault();
 
+        File backupDataFolder = lastBackupDescriptor.getBackup().getData();
+
+        Instant changeStamp = null;
+
+        try {
+            FileTime fileTime = Files.getLastModifiedTime(backupDataFolder.toPath());
+            changeStamp = fileTime.toInstant();
+        } catch (IOException e) {
+            Logger.printApplicationLog("Cant parse backup edit time", "BackupStrategy");
+
+            return backupNeeded;
+        }
+
         Workspace backupWorkspace = workspace;
         WorkspaceDescriptor workspaceDescriptor =
                 SupportFunctions.parseWorkspaceDescriptor(backupWorkspace, Config.getConfig());
 
-        Instant lastBackupDate = lastBackupDescriptor.getChangeStampAsInstant();
+        Instant lastBackupDate = changeStamp;
         Instant current = Instant.now();
-        long dateDiffSecs = current.getEpochSecond() - lastBackupDate.getEpochSecond();
+        long dateDiffSecs = ChronoUnit.SECONDS.between(lastBackupDate, current);
 
         long ddTime = SupportFunctions.dateDiffStringToMilliseconds(workspaceDescriptor.getBackupDateDiff());
 
@@ -117,13 +133,26 @@ public class BackupStrategy {
             throws IOException {
         boolean backupNeeded = Constants.getBoolDefault();
 
+        File backupDataFolder = lastBackupDescriptor.getBackup().getData();
+
+        Instant changeStamp = null;
+
+        try {
+            FileTime fileTime = Files.getLastModifiedTime(backupDataFolder.toPath());
+            changeStamp = fileTime.toInstant();
+        } catch (IOException e) {
+            Logger.printApplicationLog("Cant parse backup edit time", "BackupStrategy");
+
+            return backupNeeded;
+        }
+
         Workspace backupWorkspace = workspace;
         WorkspaceDescriptor workspaceDescriptor =
                 SupportFunctions.parseWorkspaceDescriptor(backupWorkspace, Config.getConfig());
 
-        Instant lastBackupDate = lastBackupDescriptor.getChangeStampAsInstant();
+        Instant lastBackupDate = changeStamp;
         Instant current = Instant.now();
-        long dateDiffSecs = current.getEpochSecond() - lastBackupDate.getEpochSecond();
+        long dateDiffSecs = ChronoUnit.SECONDS.between(lastBackupDate, current);
 
         long ddTime = SupportFunctions.dateDiffStringToMilliseconds(workspaceDescriptor.getBackupDateDiff()) / 1000;
 

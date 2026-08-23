@@ -17,6 +17,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -1031,11 +1032,25 @@ public class SupportFunctions {
             }
 
             if (last.getDescriptor() == null || workspaceBackup.getDescriptor() == null) {
-                return last;
+                continue;
             }
 
-            Instant lastDate = last.getDescriptor().getChangeStampAsInstant();
-            Instant currentDate = workspaceBackup.getDescriptor().getChangeStampAsInstant();
+            File lastDataFolder = last.getDescriptor().getBackup().getData();
+            File currentDataFolder = workspaceBackup.getDescriptor().getBackup().getData();
+
+            Instant lastDate = null;
+            Instant currentDate = null;
+
+            try {
+                FileTime fileTime = Files.getLastModifiedTime(lastDataFolder.toPath());
+                lastDate = fileTime.toInstant();
+                FileTime fileTimeCurrent = Files.getLastModifiedTime(currentDataFolder.toPath());
+                currentDate = fileTimeCurrent.toInstant();
+            } catch (IOException e) {
+                Logger.printApplicationLog("Cant parse backup edit time", "BackupStrategy");
+
+                continue;
+            }
 
             if (currentDate.isAfter(lastDate)) {
                 last = workspaceBackup;

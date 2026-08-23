@@ -425,9 +425,6 @@ public class BackupController {
             String filesPathsValue = String.join(Constants.getListSeparator(), filesPaths);
             String foldersPathsValue = String.join(Constants.getListSeparator(), foldersPaths);
 
-            System.out.println("Filepaths " + filesPathsValue);
-            System.out.println("Folderpaths " + foldersPathsValue);
-
             SupportFunctions.setStringProperty(
                     properties,
                     Constants.getPropertyNameBackupDateDiff(),

@@ -1,8 +1,10 @@
 package xenmirror.gui;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.*;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import xenmirror.controllers.BackupController;
@@ -50,7 +52,7 @@ public class ManageBackupsWindow extends JFrame {
         table.getColumnModel().getColumn(3).setCellRenderer(getTableCellRenderer("Edit"));
         table.getColumnModel().getColumn(4).setCellRenderer(getTableCellRenderer("Delete"));
 
-        table.getSelectionModel().addListSelectionListener(getTableListSelectionListener());
+        table.addMouseListener(getTableMouseListener());
 
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
@@ -87,31 +89,36 @@ public class ManageBackupsWindow extends JFrame {
         };
     }
 
-    private ListSelectionListener getTableListSelectionListener() {
-        return e -> {
-            if (!e.getValueIsAdjusting()) {
-                int viewRow = table.getSelectedRow();
-                if (viewRow < 0) return;
+    private MouseListener getTableMouseListener() {
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    Point p = e.getPoint();
 
-                int viewColumn = table.getSelectedColumn();
-                if (viewColumn < 0) return;
+                    int viewRow = table.rowAtPoint(p);
+                    if (viewRow < 0) return;
 
-                int modelRow = table.convertRowIndexToModel(viewRow);
-                int modelColumn = table.convertColumnIndexToModel(viewColumn);
+                    int viewColumn = table.columnAtPoint(p);
+                    if (viewColumn < 0) return;
 
-                switch (modelColumn) {
-                    case 1:
-                        viewBackups(modelRow);
-                        break;
-                    case 2:
-                        backup(modelRow);
-                        break;
-                    case 3:
-                        editWorkspace(modelRow);
-                        break;
-                    case 4:
-                        removeWorkspace(modelRow);
-                        break;
+                    int modelRow = table.convertRowIndexToModel(viewRow);
+                    int modelColumn = table.convertColumnIndexToModel(viewColumn);
+
+                    switch (modelColumn) {
+                        case 1:
+                            viewBackups(modelRow);
+                            break;
+                        case 2:
+                            backup(modelRow);
+                            break;
+                        case 3:
+                            editWorkspace(modelRow);
+                            break;
+                        case 4:
+                            removeWorkspace(modelRow);
+                            break;
+                    }
                 }
             }
         };

@@ -87,8 +87,8 @@ public class Tray {
     private void manageBackups() {
         Logger.printApplicationLog("Manage backups", "Tray");
 
-        ManageBackupsWindow manageBackupsWindow = new ManageBackupsWindow(controller);
-        manageBackupsWindow.showWindow();
+        ManageWorkspacesWindow manageWorkspacesWindow = new ManageWorkspacesWindow(controller);
+        manageWorkspacesWindow.showWindow();
     }
 
     private void settings() {

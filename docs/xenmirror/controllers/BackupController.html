@@ -178,21 +178,29 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#prepareWorkspaceWithDao(xenmirror.models.Workspace)" class="member-name-link">prepareWorkspaceWithDao</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeWorkspace(xenmirror.models.Workspace)" class="member-name-link">removeWorkspace</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToRemove)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeBackup(xenmirror.models.Backup,xenmirror.models.Workspace)" class="member-name-link">removeBackup</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backupToRemove,
+ <a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;parentWorkspace)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restore(xenmirror.models.Workspace)" class="member-name-link">restore</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;backupWorkspace)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeWorkspace(xenmirror.models.Workspace)" class="member-name-link">removeWorkspace</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToRemove)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restoreBackupFromArchive(xenmirror.models.Backup,java.util.List,java.util.List,xenmirror.models.WorkspaceDescriptor)" class="member-name-link">restoreBackupFromArchive</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backup,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restore(xenmirror.models.Workspace)" class="member-name-link">restore</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;backupWorkspace)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restoreBackupFromArchive(xenmirror.models.Backup,java.util.List,java.util.List,xenmirror.models.WorkspaceDescriptor)" class="member-name-link">restoreBackupFromArchive</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backup,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&gt;&nbsp;backupFiles,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&gt;&nbsp;backupFolders,
  <a href="../models/WorkspaceDescriptor.html" title="class in xenmirror.models">WorkspaceDescriptor</a>&nbsp;workspaceDescriptor)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restoreBackupFromFolder(xenmirror.models.Backup,java.util.List,java.util.List)" class="member-name-link">restoreBackupFromFolder</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backup,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restoreBackupFromFolder(xenmirror.models.Backup,java.util.List,java.util.List)" class="member-name-link">restoreBackupFromFolder</a><wbr>(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backup,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&gt;&nbsp;backupFiles,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&gt;&nbsp;backupFolders)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#restoreToBackup(xenmirror.models.Workspace,xenmirror.models.Backup)" class="member-name-link">restoreToBackup</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace,
+ <a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backupToRestore)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rotateBackups(xenmirror.models.Workspace,java.util.List,xenmirror.dao.BackupDAO)" class="member-name-link">rotateBackups</a><wbr>(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToRotate,
@@ -375,6 +383,20 @@ loadScripts(document, 'script');</script>
 <h3>updateWorkspaceDescriptor</h3>
 <div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateWorkspaceDescriptor</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;descriptorFile,
  <a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspaceToUpdate)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="removeBackup(xenmirror.models.Backup,xenmirror.models.Workspace)">
+<h3>removeBackup</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeBackup</span><wbr><span class="parameters">(<a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backupToRemove,
+ <a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;parentWorkspace)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="restoreToBackup(xenmirror.models.Workspace,xenmirror.models.Backup)">
+<h3>restoreToBackup</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">restoreToBackup</span><wbr><span class="parameters">(<a href="../models/Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace,
+ <a href="../models/Backup.html" title="class in xenmirror.models">Backup</a>&nbsp;backupToRestore)</span></div>
 </section>
 </li>
 </ul>

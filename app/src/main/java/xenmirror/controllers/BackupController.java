@@ -483,4 +483,39 @@ public class BackupController {
             e.printStackTrace();
         }
     }
+
+    public void removeBackup(Backup backupToRemove, Workspace parentWorkspace) {
+        if (parentWorkspace.getBackups().remove(backupToRemove)) {
+            File backupFolder = backupToRemove.getData();
+
+            if (!backupFolder.exists()) {
+                return;
+            }
+
+            SupportFunctions.clearFolder(backupFolder);
+            backupFolder.delete();
+        }
+    }
+
+    public void restoreToBackup(Workspace workspace, Backup backupToRestore) {
+        List<String> backupFilePaths = backupToRestore.getDescriptor().getFilePaths();
+        List<String> backupFolderPaths = backupToRestore.getDescriptor().getFoldersPaths();
+
+        List<File> backupFiles = SupportFunctions.listOfPathsToListOfFiles(backupFilePaths);
+        List<File> backupFolders = SupportFunctions.listOfPathsToListOfFiles(backupFolderPaths);
+
+        for (File file : backupFiles) {
+            SupportFunctions.removeFilesAndFolders(file);
+        }
+
+        for (File folder : backupFolders) {
+            SupportFunctions.removeFilesAndFolders(folder);
+        }
+
+        if (workspace.getDescriptor().isBackupInArchive()) {
+            restoreBackupFromArchive(backupToRestore, backupFiles, backupFolders, workspace.getDescriptor());
+        } else {
+            restoreBackupFromFolder(backupToRestore, backupFiles, backupFolders);
+        }
+    }
 }

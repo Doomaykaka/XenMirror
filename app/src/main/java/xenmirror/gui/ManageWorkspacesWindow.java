@@ -12,16 +12,16 @@ import xenmirror.models.BackupStrategyType;
 import xenmirror.models.Workspace;
 import xenmirror.utils.SupportFunctions;
 
-public class ManageBackupsWindow extends JFrame {
-    private static BackupController backupController;
+public class ManageWorkspacesWindow extends JFrame {
+    private BackupController backupController;
     private final JTable table;
     private final DefaultTableModel tableModel;
 
     private static final int WIDTH = 600;
     private static final int HEIGHT = 450;
-    private static final String WINDOW_TITLE = "Manage backups";
+    private static final String WINDOW_TITLE = "Manage workspaces";
 
-    public ManageBackupsWindow(BackupController backupController) {
+    public ManageWorkspacesWindow(BackupController backupController) {
         boolean isResizable = false;
 
         setTitle(WINDOW_TITLE);
@@ -125,7 +125,12 @@ public class ManageBackupsWindow extends JFrame {
         };
     }
 
-    private void viewBackups(int row) {}
+    private void viewBackups(int row) {
+        Workspace workspace = (Workspace) table.getModel().getValueAt(row, 2);
+
+        WorkspaceBackupsWindow workspaceBackupsWindow = new WorkspaceBackupsWindow(backupController, workspace);
+        workspaceBackupsWindow.showWindow();
+    }
 
     private void backup(int row) {
         Workspace workspace = (Workspace) table.getModel().getValueAt(row, 2);

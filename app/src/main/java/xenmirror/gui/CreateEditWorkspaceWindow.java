@@ -3,6 +3,7 @@ package xenmirror.gui;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -428,6 +429,8 @@ public class CreateEditWorkspaceWindow extends JFrame {
         JPanel backupUseManualStrategyInput = (JPanel) fields.get(8);
         JPanel backupUseTimeStrategyInput = (JPanel) fields.get(9);
         JPanel backupUseChangeStrategyInput = (JPanel) fields.get(10);
+        JPanel backupFoldersInput = (JPanel) fields.get(11);
+        JPanel backupFilesInput = (JPanel) fields.get(13);
         JPanel backupRotateAfterInput = (JPanel) fields.get(15);
 
         String dateDiff = SupportFunctions.getEntityWindowJTextfieldValue(backupDateDiffInput);
@@ -440,6 +443,8 @@ public class CreateEditWorkspaceWindow extends JFrame {
         boolean useManualStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseManualStrategyInput);
         boolean useTimeStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseTimeStrategyInput);
         boolean useChangeStrategy = SupportFunctions.getEntityWindowCheckboxValue(backupUseChangeStrategyInput);
+        String foldersRepr = SupportFunctions.getEntityWindowJTextfieldValue(backupFoldersInput);
+        String filesRepr = SupportFunctions.getEntityWindowJTextfieldValue(backupFilesInput);
         String rotateAfter = SupportFunctions.getEntityWindowJTextfieldValue(backupRotateAfterInput);
 
         List<String> strategies = new ArrayList<>();
@@ -479,8 +484,33 @@ public class CreateEditWorkspaceWindow extends JFrame {
         workspaceDescriptorToEdit.setBackupPreffix(prefix);
         workspaceDescriptorToEdit.setBackupPostfix(postfix);
         workspaceDescriptorToEdit.setBackupInArchive(inArchive);
-        workspaceDescriptorToEdit.setFoldersToBackup(List.of(folders));
-        workspaceDescriptorToEdit.setFilesToBackup(List.of(files));
+
+        if (folders == null && !foldersRepr.isEmpty()) {
+            String[] foldersPathsRepr = foldersRepr.split(Constants.getListSeparator());
+            List<File> foldersPaths = Arrays.asList(foldersPathsRepr).stream()
+                    .map(pathRepr -> new File(pathRepr))
+                    .toList();
+
+            workspaceDescriptorToEdit.setFoldersToBackup(foldersPaths);
+        } else if (folders != null) {
+            List<File> foldersPaths = Arrays.asList(folders);
+
+            workspaceDescriptorToEdit.setFoldersToBackup(foldersPaths);
+        }
+
+        if (files == null && !filesRepr.isEmpty()) {
+            String[] filesPathsRepr = filesRepr.split(Constants.getListSeparator());
+            List<File> filesPaths = Arrays.asList(filesPathsRepr).stream()
+                    .map(pathRepr -> new File(pathRepr))
+                    .toList();
+
+            workspaceDescriptorToEdit.setFilesToBackup(filesPaths);
+        } else if (files != null) {
+            List<File> filesPaths = Arrays.asList(files);
+
+            workspaceDescriptorToEdit.setFilesToBackup(filesPaths);
+        }
+
         workspaceDescriptorToEdit.setBackupsStrategyTypes(strategyTypesValue);
         workspaceDescriptorToEdit.setRotateAfter(rotateAfterValue);
 

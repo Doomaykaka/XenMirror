@@ -392,6 +392,87 @@ public class BackupController {
     }
 
     public void editWorkspace(Workspace workspaceToEdit) {
-        // TODO
+        File backupsFolder = new File(Config.getConfig().getBackupsFolderPath());
+        File workspaceFolder = new File(backupsFolder, workspaceToEdit.getName());
+
+        if (!workspaceFolder.exists()) {
+            workspaceFolder.mkdir();
+        }
+
+        Path pathToDescriptor = Path.of(workspaceFolder
+                .toPath()
+                .resolve(Constants.getConfigFilename())
+                .toFile()
+                .getAbsolutePath());
+
+        File descriptorFile = pathToDescriptor.toFile();
+
+        updateWorkspaceDescriptor(descriptorFile, workspaceToEdit);
+    }
+
+    private void updateWorkspaceDescriptor(File descriptorFile, Workspace workspaceToUpdate) {
+        try (FileOutputStream descriptorFOS = new FileOutputStream(descriptorFile.getAbsolutePath())) {
+            OutputStreamWriter writer =
+                    new OutputStreamWriter(descriptorFOS, Config.getConfig().getSystemEncoding());
+            Properties properties = new Properties();
+
+            List<File> files = workspaceToUpdate.getDescriptor().getFilesToBackup();
+            List<File> folders = workspaceToUpdate.getDescriptor().getFoldersToBackup();
+            List<String> filesPaths =
+                    files.stream().map(file -> file.getAbsolutePath()).toList();
+            List<String> foldersPaths =
+                    folders.stream().map(folder -> folder.getAbsolutePath()).toList();
+            String filesPathsValue = String.join(Constants.getListSeparator(), filesPaths);
+            String foldersPathsValue = String.join(Constants.getListSeparator(), foldersPaths);
+
+            System.out.println("Filepaths " + filesPathsValue);
+            System.out.println("Folderpaths " + foldersPathsValue);
+
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupDateDiff(),
+                    workspaceToUpdate.getDescriptor().getBackupDateDiff());
+            SupportFunctions.setBooleanProperty(
+                    properties,
+                    Constants.getPropertyNameBackupInArchive(),
+                    workspaceToUpdate.getDescriptor().isBackupInArchive());
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupPassword(),
+                    workspaceToUpdate.getDescriptor().getBackupPassword());
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupPostfix(),
+                    workspaceToUpdate.getDescriptor().getBackupPostfix());
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupPreffix(),
+                    workspaceToUpdate.getDescriptor().getBackupPreffix());
+            SupportFunctions.setBooleanProperty(
+                    properties,
+                    Constants.getPropertyNameBackupUseTimestamp(),
+                    workspaceToUpdate.getDescriptor().isBackupUseTimestamps());
+            SupportFunctions.setBooleanProperty(
+                    properties,
+                    Constants.getPropertyNameBackupUseVersion(),
+                    workspaceToUpdate.getDescriptor().isBackupUseVersion());
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameBackupsStrategyTypes(),
+                    workspaceToUpdate.getDescriptor().getBackupsStrategyTypes());
+            SupportFunctions.setStringProperty(properties, Constants.getPropertyNameFilesToBackup(), filesPathsValue);
+            SupportFunctions.setStringProperty(
+                    properties, Constants.getPropertyNameFoldersToBackup(), foldersPathsValue);
+            SupportFunctions.setStringProperty(
+                    properties,
+                    Constants.getPropertyNameRotateAfterCount(),
+                    Integer.toString(workspaceToUpdate.getDescriptor().getRotateAfter()));
+
+            properties.store(writer, Constants.getTextDefault());
+            descriptorFOS.flush();
+        } catch (SecurityException | IOException e) {
+            Logger.printApplicationLog("Failed to update workspace descriptor file", "BackupController");
+            e.printStackTrace();
+        }
     }
 }

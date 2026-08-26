@@ -496,6 +496,8 @@ public class CreateEditWorkspaceWindow extends JFrame {
             List<File> foldersPaths = Arrays.asList(folders);
 
             workspaceDescriptorToEdit.setFoldersToBackup(foldersPaths);
+        } else {
+            workspaceDescriptorToEdit.setFoldersToBackup(new ArrayList<>());
         }
 
         if (files == null && !filesRepr.isEmpty()) {
@@ -509,6 +511,8 @@ public class CreateEditWorkspaceWindow extends JFrame {
             List<File> filesPaths = Arrays.asList(files);
 
             workspaceDescriptorToEdit.setFilesToBackup(filesPaths);
+        } else {
+            workspaceDescriptorToEdit.setFilesToBackup(new ArrayList<>());
         }
 
         workspaceDescriptorToEdit.setBackupsStrategyTypes(strategyTypesValue);

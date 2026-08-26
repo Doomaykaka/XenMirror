@@ -121,6 +121,7 @@ public class SupportFunctions {
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setMultiSelectionEnabled(true);
         int state = fileChooser.showOpenDialog(null);
 
         if (state == JFileChooser.APPROVE_OPTION) {
@@ -139,6 +140,7 @@ public class SupportFunctions {
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setMultiSelectionEnabled(true);
         int state = fileChooser.showOpenDialog(null);
 
         if (state == JFileChooser.APPROVE_OPTION) {

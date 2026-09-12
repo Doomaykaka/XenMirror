@@ -151,35 +151,39 @@ loadScripts(document, 'script');</script>
  <a href="Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace,
  <a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;lastBackupDescriptor)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generateNewBackupDescriptor(xenmirror.models.WorkspaceDescriptor)" class="member-name-link">generateNewBackupDescriptor</a><wbr>(<a href="WorkspaceDescriptor.html" title="class in xenmirror.models">WorkspaceDescriptor</a>&nbsp;workspaceDescriptor)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#checkThatBackupNeededOnChange(xenmirror.models.BackupDescriptor,xenmirror.models.BackupDescriptor)" class="member-name-link">checkThatBackupNeededOnChange</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
+ <a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;lastBackupDescriptor)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBackupName(xenmirror.models.BackupDescriptor,xenmirror.models.Workspace)" class="member-name-link">getBackupName</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
- <a href="Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generateNewBackupDescriptor(xenmirror.models.WorkspaceDescriptor)" class="member-name-link">generateNewBackupDescriptor</a><wbr>(<a href="WorkspaceDescriptor.html" title="class in xenmirror.models">WorkspaceDescriptor</a>&nbsp;workspaceDescriptor)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#packData(xenmirror.models.BackupDescriptor,xenmirror.models.Workspace)" class="member-name-link">packData</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBackupName(xenmirror.models.BackupDescriptor,xenmirror.models.Workspace)" class="member-name-link">getBackupName</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
  <a href="Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#prepareBackupContent(xenmirror.models.BackupDescriptor,xenmirror.models.Workspace,xenmirror.models.WorkspaceDescriptor,java.io.File,java.lang.String,java.util.List,java.util.List)" class="member-name-link">prepareBackupContent</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#packData(xenmirror.models.BackupDescriptor,xenmirror.models.Workspace)" class="member-name-link">packData</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
+ <a href="Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#prepareBackupContent(xenmirror.models.BackupDescriptor,xenmirror.models.Workspace,xenmirror.models.WorkspaceDescriptor,java.io.File,java.lang.String,java.util.List,java.util.List)" class="member-name-link">prepareBackupContent</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
  <a href="Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace,
  <a href="WorkspaceDescriptor.html" title="class in xenmirror.models">WorkspaceDescriptor</a>&nbsp;workspaceDescriptor,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;currentBackupFolder,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;backupFolderName,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;filesToBackup,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;foldersToBackup)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#prepareBackupStructure(xenmirror.models.BackupDescriptor,xenmirror.models.Workspace,xenmirror.models.WorkspaceDescriptor)" class="member-name-link">prepareBackupStructure</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#prepareBackupStructure(xenmirror.models.BackupDescriptor,xenmirror.models.Workspace,xenmirror.models.WorkspaceDescriptor)" class="member-name-link">prepareBackupStructure</a><wbr>(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
  <a href="Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace,
  <a href="WorkspaceDescriptor.html" title="class in xenmirror.models">WorkspaceDescriptor</a>&nbsp;workspaceDescriptor)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Backup.html" title="class in xenmirror.models">Backup</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startBackupProcess(xenmirror.models.Workspace,xenmirror.models.BackupDescriptor)" class="member-name-link">startBackupProcess</a><wbr>(<a href="Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace,
- <a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;lastBackupDescriptor)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Backup.html" title="class in xenmirror.models">Backup</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startBackupProcess(xenmirror.models.Workspace,xenmirror.models.BackupDescriptor)" class="member-name-link">startBackupProcess</a><wbr>(<a href="Workspace.html" title="class in xenmirror.models">Workspace</a>&nbsp;workspace,
+ <a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;lastBackupDescriptor)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -248,6 +252,13 @@ loadScripts(document, 'script');</script>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="checkThatBackupNeededOnChange(xenmirror.models.BackupDescriptor,xenmirror.models.BackupDescriptor)">
+<h3>checkThatBackupNeededOnChange</h3>
+<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">checkThatBackupNeededOnChange</span><wbr><span class="parameters">(<a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;backupDescriptor,
+ <a href="BackupDescriptor.html" title="class in xenmirror.models">BackupDescriptor</a>&nbsp;lastBackupDescriptor)</span></div>
 </section>
 </li>
 <li>

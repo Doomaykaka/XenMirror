@@ -78,10 +78,7 @@ public class BackupStrategy {
                 return backupNeeded;
             }
 
-            Instant lastBackupDescriptorStamp = lastBackupDescriptor.getChangeStampAsInstant();
-            Instant generatedNewBackupDescriptorStamp = generatedNewBackupDescriptor.getChangeStampAsInstant();
-
-            backupNeeded = lastBackupDescriptorStamp.isBefore(generatedNewBackupDescriptorStamp);
+            backupNeeded = checkThatBackupNeededOnChange(generatedNewBackupDescriptor, lastBackupDescriptor);
 
             return backupNeeded;
         }
@@ -91,6 +88,18 @@ public class BackupStrategy {
 
             return backupNeeded;
         }
+
+        return backupNeeded;
+    }
+
+    private boolean checkThatBackupNeededOnChange(
+            BackupDescriptor backupDescriptor, BackupDescriptor lastBackupDescriptor) {
+        boolean backupNeeded = Constants.getBoolDefault();
+
+        Instant lastBackupDescriptorStamp = lastBackupDescriptor.getChangeStampAsInstant();
+        Instant generatedNewBackupDescriptorStamp = backupDescriptor.getChangeStampAsInstant();
+
+        backupNeeded = lastBackupDescriptorStamp.isBefore(generatedNewBackupDescriptorStamp);
 
         return backupNeeded;
     }

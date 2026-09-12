@@ -123,49 +123,7 @@ public class BackupDescriptor implements Cloneable {
     }
 
     private void calculateChangeStamp(List<File> filesToBackup, List<File> foldersToBackup) {
-        Instant lastChangeStamp = null;
-
-        if (foldersToBackup != null) {
-            for (File folderToBackup : foldersToBackup) {
-                FileTime folderTime;
-                try {
-                    folderTime = Files.getLastModifiedTime(folderToBackup.toPath());
-                    Instant changeStamp = folderTime.toInstant();
-
-                    if (lastChangeStamp == null) {
-                        lastChangeStamp = changeStamp;
-                    } else {
-                        if (lastChangeStamp.isBefore(changeStamp)) {
-                            lastChangeStamp = changeStamp;
-                        }
-                    }
-                } catch (IOException e) {
-                    Logger.printApplicationLog("calculate changestep error", "BackupDescriptor");
-                    Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
-                }
-            }
-        }
-
-        if (filesToBackup != null) {
-            for (File fileToBackup : filesToBackup) {
-                FileTime fileTime;
-                try {
-                    fileTime = Files.getLastModifiedTime(fileToBackup.toPath());
-                    Instant changeStamp = fileTime.toInstant();
-
-                    if (lastChangeStamp == null) {
-                        lastChangeStamp = changeStamp;
-                    } else {
-                        if (lastChangeStamp.isBefore(changeStamp)) {
-                            lastChangeStamp = changeStamp;
-                        }
-                    }
-                } catch (IOException e) {
-                    Logger.printApplicationLog("calculate changestep error", "BackupDescriptor");
-                    Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
-                }
-            }
-        }
+        Instant lastChangeStamp = getCurrentChangeStamp(filesToBackup, foldersToBackup);
 
         if (lastChangeStamp != null) {
             changeStamp = lastChangeStamp.toString();
@@ -177,49 +135,125 @@ public class BackupDescriptor implements Cloneable {
     public Instant getCurrentChangeStamp(List<File> filesToBackup, List<File> foldersToBackup) {
         Instant lastChangeStamp = null;
 
-        if (foldersToBackup != null) {
-            for (File folderToBackup : foldersToBackup) {
-                FileTime folderTime;
-                try {
-                    folderTime = Files.getLastModifiedTime(folderToBackup.toPath());
-                    Instant changeStamp = folderTime.toInstant();
+        Instant foldersLastChangeStamp = getCurrentChangeStampForFolders(foldersToBackup);
 
-                    if (lastChangeStamp == null) {
-                        lastChangeStamp = changeStamp;
-                    } else {
-                        if (lastChangeStamp.isBefore(changeStamp)) {
-                            lastChangeStamp = changeStamp;
-                        }
-                    }
-                } catch (IOException e) {
-                    Logger.printApplicationLog("get changestep error", "BackupDescriptor");
-                    Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
-                }
-            }
+        if (foldersLastChangeStamp != null) {
+            lastChangeStamp = foldersLastChangeStamp;
         }
 
-        if (filesToBackup != null) {
-            for (File fileToBackup : filesToBackup) {
-                FileTime fileTime;
-                try {
-                    fileTime = Files.getLastModifiedTime(fileToBackup.toPath());
-                    Instant changeStamp = fileTime.toInstant();
+        Instant filesLastChangeStamp = getCurrentChangeStampForFiles(filesToBackup);
 
-                    if (lastChangeStamp == null) {
+        if (lastChangeStamp != null && filesLastChangeStamp != null && lastChangeStamp.isBefore(filesLastChangeStamp)) {
+            lastChangeStamp = filesLastChangeStamp;
+        } else if (lastChangeStamp == null && filesLastChangeStamp != null) {
+            lastChangeStamp = filesLastChangeStamp;
+        }
+
+        return lastChangeStamp;
+    }
+
+    public Instant getCurrentChangeStampForFolders(List<File> foldersToBackup) {
+        Instant lastChangeStamp = null;
+
+        if (foldersToBackup != null) {
+            for (File folderToBackup : foldersToBackup) {
+                Instant changeStamp = getCurrentChangeStampForFolder(folderToBackup);
+
+                if (changeStamp == null) {
+                    continue;
+                }
+
+                if (lastChangeStamp == null) {
+                    lastChangeStamp = changeStamp;
+                } else {
+                    if (lastChangeStamp.isBefore(changeStamp)) {
                         lastChangeStamp = changeStamp;
-                    } else {
-                        if (lastChangeStamp.isBefore(changeStamp)) {
-                            lastChangeStamp = changeStamp;
-                        }
                     }
-                } catch (IOException e) {
-                    Logger.printApplicationLog("get changestep error", "BackupDescriptor");
-                    Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
                 }
             }
         }
 
         return lastChangeStamp;
+    }
+
+    public Instant getCurrentChangeStampForFolder(File folderToBackup) {
+        Instant lastChangeStamp = null;
+
+        if (folderToBackup != null) {
+            FileTime folderTime;
+            try {
+                folderTime = Files.getLastModifiedTime(folderToBackup.toPath());
+                Instant changeStamp = folderTime.toInstant();
+
+                if (lastChangeStamp == null) {
+                    lastChangeStamp = changeStamp;
+                }
+
+                if (folderToBackup.listFiles() == null) {
+                    return lastChangeStamp;
+                }
+
+                for (File child : folderToBackup.listFiles()) {
+                    Instant childStamp = null;
+
+                    if (child.isDirectory()) {
+                        childStamp = getCurrentChangeStampForFolder(child);
+                    } else {
+                        childStamp = getCurrentChangeStampForFile(child);
+                    }
+
+                    if (childStamp != null && lastChangeStamp.isBefore(childStamp)) {
+                        lastChangeStamp = childStamp;
+                    }
+                }
+            } catch (IOException e) {
+                Logger.printApplicationLog("get changestep error", "BackupDescriptor");
+                Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
+            }
+        }
+
+        return lastChangeStamp;
+    }
+
+    public Instant getCurrentChangeStampForFiles(List<File> filesToBackup) {
+        Instant lastChangeStamp = null;
+
+        if (filesToBackup != null) {
+            for (File fileToBackup : filesToBackup) {
+                Instant changeStamp = getCurrentChangeStampForFile(fileToBackup);
+
+                if (changeStamp == null) {
+                    continue;
+                }
+
+                if (lastChangeStamp == null) {
+                    lastChangeStamp = changeStamp;
+                } else {
+                    if (lastChangeStamp.isBefore(changeStamp)) {
+                        lastChangeStamp = changeStamp;
+                    }
+                }
+            }
+        }
+
+        return lastChangeStamp;
+    }
+
+    public Instant getCurrentChangeStampForFile(File fileToBackup) {
+        Instant changeStamp = null;
+
+        if (fileToBackup != null) {
+            FileTime fileTime;
+            try {
+                fileTime = Files.getLastModifiedTime(fileToBackup.toPath());
+                changeStamp = fileTime.toInstant();
+            } catch (IOException e) {
+                Logger.printApplicationLog("get changestep error", "BackupDescriptor");
+                Logger.printApplicationLog(e.getMessage(), "BackupDescriptor");
+            }
+        }
+
+        return changeStamp;
     }
 
     public List<String> getFilePaths() {
